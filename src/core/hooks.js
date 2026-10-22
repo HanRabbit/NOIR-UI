@@ -159,7 +159,16 @@ export function useSmearIndicator(rootRef, selector, deps=[]){
       setOn(false);
       return;
     }
-    const to={x:el.offsetLeft, y:el.offsetTop, w:el.offsetWidth, h:el.offsetHeight, on:true};
+    /* offsetLeft/Top round to whole pixels; measure the sub-pixel centre instead
+       (centre is stable while the target is scaled on :active) */
+    const rr=root.getBoundingClientRect(), er=el.getBoundingClientRect();
+    const k=root.offsetWidth?rr.width/root.offsetWidth:1;
+    const w=el.offsetWidth, h=el.offsetHeight;
+    const to={
+      x:(er.left+er.width/2-rr.left)/k-root.clientLeft+root.scrollLeft-w/2,
+      y:(er.top+er.height/2-rr.top)/k-root.clientTop+root.scrollTop-h/2,
+      w, h, on:true,
+    };
     const prev=last.current;
     last.current=to;
     setOn(true);
@@ -211,17 +220,24 @@ export function useSmearIndicator(rootRef, selector, deps=[]){
   const placeRef=useRef(null);
   placeRef.current=place;
   const mounted=useRef(false);
+  const roRef=useRef(null);
   useLayoutEffect(()=>{
     place(mounted.current);
     mounted.current=true;
+    /* items can move without the root resizing (e.g. a late web font widening a label) */
+    const root=rootRef.current;
+    if(root && roRef.current) for(const c of root.children) roRef.current.observe(c);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   },deps);
   useLayoutEffect(()=>{
     const root=rootRef.current;
-    if(!root || typeof ResizeObserver==='undefined') return undefined;
-    const ro=new ResizeObserver(()=>{ if(travel.current?.playState!=='running') place(false); });
-    ro.observe(root);
-    return ()=>ro.disconnect();
+    if(!root) return undefined;
+    const settle=()=>{ if(travel.current?.playState!=='running') place(false); };
+    const ro=typeof ResizeObserver==='undefined'?null:new ResizeObserver(settle);
+    roRef.current=ro;
+    if(ro){ ro.observe(root); for(const c of root.children) ro.observe(c); }
+    document.fonts?.addEventListener?.('loadingdone', settle);
+    return ()=>{ ro?.disconnect(); roRef.current=null; document.fonts?.removeEventListener?.('loadingdone', settle); };
   },[place, rootRef]);
   return {outerRef, inkRef, on, place};
 }
