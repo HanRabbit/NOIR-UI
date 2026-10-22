@@ -1,0 +1,14 @@
+/* Theme reveal: freeze old snapshot, the new one is clipped by JS */
+html.noir-theme-vt::view-transition-old(root),
+html.noir-theme-vt::view-transition-new(root){
+  animation:none;
+  mix-blend-mode:normal;
+}
+html.noir-theme-vt::view-transition-old(root){z-index:1}
+html.noir-theme-vt::view-transition-new(root){z-index:2}
+
+html{transition:background-color var(--nr-dur) var(--nr-ease)}
+
+.nr-page{position:relative;min-width:0}
+.nr-page > [data-page]{will-change:transform, opacity, filter}
+.nr-page > [data-page="out"]{position:absolute;left:0;right:0;top:0;z-index:1;pointer-events:none}

@@ -1,0 +1,129 @@
+/* Blur releases before 70% so text does not snap sharp when the filter layer drops */
+@keyframes nr-smear-in{
+  0%{opacity:0;filter:blur(var(--nr-mb, var(--nr-blur)));transform:translate3d(var(--nr-mx, 0), var(--nr-my, var(--nr-y)), 0) scale(var(--nr-ms, 1))}
+  70%{filter:blur(0px)}
+  100%{opacity:1;filter:blur(0px);transform:translate3d(0,0,0) scale(1)}
+}
+@keyframes nr-smear-out{
+  0%{opacity:1;filter:blur(0px);transform:translate3d(0,0,0) scale(1)}
+  28%{filter:blur(var(--nr-mb, var(--nr-blur)))}
+  100%{opacity:0;filter:blur(var(--nr-mb, var(--nr-blur)));transform:translate3d(var(--nr-mx, 0), var(--nr-my, var(--nr-y)), 0) scale(var(--nr-ms, 1))}
+}
+@keyframes nr-ripple{
+  0%{opacity:.32;transform:translate(-50%,-50%) scale(0);filter:blur(2px)}
+  100%{opacity:0;transform:translate(-50%,-50%) scale(1);filter:blur(10px)}
+}
+@keyframes nr-pulse{0%,100%{opacity:1}50%{opacity:.4}}
+@keyframes nr-ping{
+  0%{transform:scale(1);opacity:.5}
+  100%{transform:scale(2.6);opacity:0}
+}
+@keyframes nr-spin{to{transform:rotate(360deg)}}
+@keyframes nr-dash{
+  0%{stroke-dasharray:1 150;stroke-dashoffset:0}
+  50%{stroke-dasharray:90 150;stroke-dashoffset:-35}
+  100%{stroke-dasharray:90 150;stroke-dashoffset:-124}
+}
+@keyframes nr-shimmer{
+  0%{transform:translateX(-100%)}
+  100%{transform:translateX(100%)}
+}
+@keyframes nr-indeterminate{
+  0%{transform:translateX(-100%) scaleX(.4);filter:blur(0px)}
+  50%{transform:translateX(40%) scaleX(.9);filter:blur(1.5px)}
+  100%{transform:translateX(160%) scaleX(.4);filter:blur(0px)}
+}
+@keyframes nr-blink{50%{opacity:0}}
+@keyframes nr-shake{
+  0%,100%{transform:translateX(0)}
+  20%{transform:translateX(-5px);filter:blur(.6px)}
+  40%{transform:translateX(4px)}
+  60%{transform:translateX(-3px);filter:blur(.3px)}
+  80%{transform:translateX(2px)}
+}
+@keyframes nr-check{
+  from{stroke-dashoffset:var(--nr-len, 24)}
+  to{stroke-dashoffset:0}
+}
+
+.nr-swap{display:inline-grid;justify-items:start;align-items:center;vertical-align:middle;position:relative}
+.nr-swap.center{justify-items:center}
+.nr-swap-layer{
+  grid-area:1/1;
+  display:inline-flex;
+  align-items:center;
+  gap:inherit;
+  white-space:nowrap;
+}
+.nr-swap-layer.in{position:relative;z-index:1}
+.nr-swap-layer.out{position:absolute;inset:0;z-index:0;pointer-events:none}
+.nr-swap.center > .nr-swap-layer.out{justify-content:center}
+.nr-swap.block{display:grid;justify-items:stretch;width:100%}
+.nr-swap.block > .nr-swap-layer{display:block;white-space:normal}
+.nr-swap.block > .nr-swap-layer.out{inset:0 0 auto 0}
+
+/* per-character morph */
+.nr-swap-chars{position:relative;white-space:nowrap}
+.nr-swap-run{white-space:nowrap}
+.nr-swap-el{display:inline-flex;align-items:center}
+.nr-swap-chars[data-fx] > .nr-swap-run{color:transparent}
+.nr-swap-fx{position:absolute;inset:0;pointer-events:none;overflow:visible}
+.nr-swap-ch,.nr-swap-ghost{position:absolute;display:block;white-space:pre;text-align:left;will-change:transform, opacity, filter}
+.nr-swap-ghost{display:inline-flex;align-items:center}
+
+.nr-fold{
+  display:grid;
+  grid-template-rows:0fr;
+  transition:grid-template-rows var(--nr-dur-travel) var(--nr-ease-travel);
+}
+.nr-fold.open{grid-template-rows:1fr}
+.nr-fold > .nr-fold-inner{
+  min-height:0;
+  overflow:hidden;
+}
+.nr-fold > .nr-fold-inner > .nr-fold-body{
+  filter:blur(5px);
+  opacity:0;
+  transform:translate3d(0, calc(var(--nr-y-sm) * -1), 0);
+  transition: filter calc(var(--nr-dur-travel) * .6) var(--nr-ease), opacity calc(var(--nr-dur-travel) * .8) var(--nr-ease), transform var(--nr-dur-travel) var(--nr-ease);
+}
+.nr-fold.open > .nr-fold-inner > .nr-fold-body{filter:blur(0px);opacity:1;transform:none}
+.nr-fold:not(.open){pointer-events:none}
+.nr-fold.x{
+  display:inline-block;
+  vertical-align:middle;
+  overflow:hidden;
+  transition:width var(--nr-dur-travel) var(--nr-ease-travel), max-width var(--nr-dur-travel) var(--nr-ease-travel);
+}
+.nr-fold.x > .nr-fold-inner{display:flex;align-items:center;gap:inherit;width:max-content;overflow:visible}
+.nr-fold.x > .nr-fold-inner > .nr-fold-body{display:flex;align-items:center;gap:inherit;transform:translate3d(calc(var(--nr-y-sm) * -1), 0, 0)}
+.nr-fold:not(.x) > .nr-fold-inner{display:block}
+.nr-fold:not(.x) > .nr-fold-inner > .nr-fold-body{display:block}
+.nr-fold.x.open > .nr-fold-inner > .nr-fold-body{transform:none}
+
+.nr-reveal{
+  --nr-my: var(--nr-y);
+  --nr-mb: var(--nr-blur);
+  opacity:0;
+}
+.nr-reveal.on{animation:nr-smear-in var(--nr-dur-page) var(--nr-ease) both;animation-delay:var(--nr-delay, 0ms)}
+
+.nr-ripple-host{position:relative;overflow:hidden;isolation:isolate}
+.nr-ripple{
+  position:absolute;
+  border-radius:50%;
+  background:currentColor;
+  pointer-events:none;
+  animation:nr-ripple .5s var(--nr-ease) forwards;
+  z-index:-1;
+}
+
+.nr-shake{animation:nr-shake .36s var(--nr-ease)}
+
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{
+    animation-duration:.001ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:.001ms !important;
+  }
+}

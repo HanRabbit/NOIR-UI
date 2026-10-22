@@ -1,0 +1,97 @@
+.nr-side{
+  --nr-side-open:1;
+  position:sticky;
+  top:0;
+  flex:none;
+  height:100vh;
+  border-right:1px solid var(--nr-line);
+  background:var(--nr-bg);
+  z-index:5;
+}
+.nr-side-body{
+  height:100%;
+  display:flex;
+  flex-direction:column;
+  overflow-x:hidden;
+  overflow-y:auto;
+  will-change:filter;
+}
+.nr-side.dragging .nr-side-body{pointer-events:none;user-select:none}
+
+/* Handle: invisible hit strip on the border; a hairline grows in on hover */
+.nr-side-handle{
+  position:absolute;
+  top:0;
+  right:-5px;
+  width:10px;
+  height:100%;
+  z-index:2;
+  cursor:col-resize;
+  touch-action:none;
+  outline:0;
+}
+.nr-side-handle i{
+  position:absolute;
+  top:0;
+  bottom:0;
+  left:4px;
+  width:2px;
+  border-radius:2px;
+  background:var(--nr-fg);
+  opacity:0;
+  transform:scaleY(.4);
+  transition:opacity var(--nr-dur-fast) var(--nr-ease), transform var(--nr-dur) var(--nr-ease);
+}
+.nr-side-handle:hover i{opacity:.35;transform:scaleY(1);transition-delay:.12s, .12s}
+.nr-side.dragging .nr-side-handle i,.nr-side-handle:focus-visible i{opacity:.8;transform:scaleY(1);transition-delay:0s}
+html.nr-resizing,html.nr-resizing *{cursor:col-resize !important;user-select:none !important}
+
+/* Labels dissolve as the panel narrows toward the rail */
+.nr-side .nr-side-fade,
+.nr-side .nr-nav-item > span,
+.nr-side .nr-nav-item > em{
+  white-space:nowrap;
+  opacity:calc(var(--nr-side-open) * 1.6 - .6);
+}
+.nr-side[data-state="between"] .nr-side-fade,
+.nr-side[data-state="between"] .nr-nav-item > span{filter:blur(calc((1 - var(--nr-side-open)) * 4px))}
+
+/* Section headings: height, padding and text all follow --nr-side-open
+   continuously (no state switch), so nothing below them ever jumps. As the
+   label fades out, a short hairline fades in to keep the group break. */
+.nr-side .nr-nav-section,
+.nr-side .nr-nav-section:first-of-type{
+  --o:var(--nr-side-open);
+  --top:calc(var(--o) * 14px + 4px);
+  position:relative;
+  box-sizing:border-box;
+  height:calc(var(--o) * 17px + 22px);
+  padding:var(--top) 12px 0;
+  overflow:hidden;
+  white-space:nowrap;
+  color:color-mix(in srgb, var(--nr-fg-3) calc(clamp(0, var(--o) * 1.6 - .6, 1) * 100%), transparent);
+}
+.nr-side .nr-nav-section:first-of-type{--top:calc(var(--o) * 0px + 4px);height:calc(var(--o) * 3px + 22px)}
+.nr-side[data-state="between"] .nr-nav-section{filter:blur(calc((1 - var(--o)) * 3px))}
+.nr-side .nr-nav-section::after{
+  content:'';
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:18px;
+  height:1px;
+  translate:-50% -50%;
+  background:var(--nr-sep);
+  opacity:clamp(0, 1 - var(--o) * 2.2, 1);
+  pointer-events:none;
+}
+.nr-side .nr-nav-item{overflow:hidden}
+.nr-side .nr-nav-item > svg{flex:none}
+.nr-side .nr-nav > .nr-anchor{display:flex}
+.nr-side .nr-nav > .nr-anchor > .nr-nav-item{flex:1;min-width:0}
+.nr-side[data-state="rail"] .nr-nav-item:hover:not(.on){transform:none}
+.nr-side[data-state="rail"] .nr-nav-item > em{display:none}
+
+@media (prefers-reduced-motion: reduce){
+  .nr-side-body{filter:none !important}
+}

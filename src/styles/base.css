@@ -1,0 +1,25 @@
+html{
+  font-family: var(--nr-font);
+  color: var(--nr-fg);
+  background: var(--nr-bg);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: "cv11", "ss01";
+}
+body{margin:0;background:var(--nr-bg);color:var(--nr-fg)}
+[class^="nr-"]:not(html),[class^="nr-"]:not(html) *,[class^="nr-"]:not(html)::before,[class^="nr-"]:not(html)::after,
+[class*=" nr-"]:not(html),[class*=" nr-"]:not(html) *,[class*=" nr-"]:not(html)::before,[class*=" nr-"]:not(html)::after{box-sizing:border-box}
+
+[class^="nr-"] :focus-visible,[class^="nr-"]:focus-visible{outline:0}
+
+*{scrollbar-width:thin;scrollbar-color:var(--nr-fill-2) transparent}
+*::-webkit-scrollbar{width:9px;height:9px}
+*::-webkit-scrollbar-track{background:transparent}
+*::-webkit-scrollbar-thumb{background:var(--nr-fill-2);border-radius:99px;border:2px solid transparent;background-clip:padding-box}
+*::-webkit-scrollbar-thumb:hover{background:var(--nr-line-strong);background-clip:padding-box}
+*::-webkit-scrollbar-corner{background:transparent}
+
+::selection{background:var(--nr-fg);color:var(--nr-bg)}
+.nr-mono{font-family:var(--nr-mono)}
+.nr-sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}

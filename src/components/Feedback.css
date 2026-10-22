@@ -1,0 +1,119 @@
+.nr-spinner{display:block;flex:none;animation:nr-spin 1.1s linear infinite}
+.nr-spinner circle{animation:nr-dash 1.5s var(--nr-ease-inout) infinite}
+
+/* ── Progress ── */
+.nr-progress{
+  --h:4px;
+  position:relative;
+  width:100%;
+  height:var(--h);
+  border-radius:var(--nr-r-pill);
+  background:var(--nr-fill);
+  overflow:visible;
+}
+.nr-progress-sm{--h:2px}
+.nr-progress-lg{--h:6px}
+.nr-progress-bar{
+  position:absolute;
+  inset:0;
+  border-radius:inherit;
+  background:var(--nr-fg);
+  transform-origin:left center;
+  transition:transform .5s var(--nr-ease);
+}
+/* Leading edge glows and blurs so progress reads as motion, not a static fill */
+.nr-progress-head{
+  position:absolute;
+  top:50%;
+  width:18px;
+  height:calc(var(--h) * 3);
+  translate:-100% -50%;
+  border-radius:var(--nr-r-pill);
+  background:var(--nr-fg);
+  filter:blur(6px);
+  opacity:.6;
+  pointer-events:none;
+  transition:left .5s var(--nr-ease), opacity var(--nr-dur) var(--nr-ease);
+}
+.nr-progress.indeterminate{overflow:hidden}
+.nr-progress.indeterminate .nr-progress-bar{
+  transform-origin:left center;
+  animation:nr-indeterminate 1.5s var(--nr-ease-inout) infinite;
+}
+
+/* ── Ring ── */
+.nr-ring{position:relative;display:inline-grid;place-items:center;flex:none}
+.nr-ring svg{position:absolute;inset:0;transform:rotate(-90deg)}
+.nr-ring-track{stroke:var(--nr-fill)}
+.nr-ring-bar{stroke:var(--nr-fg);transition:stroke-dashoffset .55s var(--nr-ease)}
+.nr-ring-label{font:560 11px/1 var(--nr-mono);font-variant-numeric:tabular-nums}
+
+/* ── Skeleton ── */
+.nr-skeleton{
+  position:relative;
+  display:block;
+  overflow:hidden;
+  border-radius:var(--nr-r-xs);
+  background:var(--nr-fill);
+}
+.nr-skeleton.circle{border-radius:50%}
+.nr-skeleton::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:linear-gradient(90deg, transparent, var(--nr-fill-2) 45%, var(--nr-fill-2) 55%, transparent);
+  filter:blur(6px);
+  animation:nr-shimmer 1.6s var(--nr-ease-inout) infinite;
+}
+
+/* ── Badge ── */
+.nr-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  height:20px;
+  padding:0 8px;
+  border-radius:var(--nr-r-pill);
+  font:560 10.5px/1 var(--nr-font);
+  letter-spacing:.01em;
+  white-space:nowrap;
+}
+.nr-badge-outline{border:1px solid var(--nr-line);color:var(--nr-fg-2)}
+.nr-badge-solid{background:var(--nr-fg);color:var(--nr-bg)}
+.nr-badge-soft{background:var(--nr-fill);color:var(--nr-fg)}
+.nr-badge-dot{width:5px;height:5px;border-radius:50%;background:currentColor;animation:nr-pulse 1.8s var(--nr-ease) infinite}
+
+/* ── StatusDot ── */
+.nr-status{display:inline-flex;align-items:center;gap:8px;font:12px var(--nr-font);color:var(--nr-fg-2)}
+.nr-status-dot{position:relative;width:6px;height:6px;border-radius:50%;background:var(--nr-fg);flex:none}
+.nr-status-live .nr-status-dot::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  border-radius:50%;
+  background:var(--nr-fg);
+  animation:nr-ping 1.8s var(--nr-ease) infinite;
+}
+.nr-status-idle .nr-status-dot{background:transparent;box-shadow:inset 0 0 0 1px var(--nr-fg)}
+.nr-status-busy .nr-status-dot{animation:nr-pulse 1s var(--nr-ease) infinite}
+.nr-status-off .nr-status-dot{background:var(--nr-fg-4)}
+
+/* ── Kbd ── */
+.nr-kbd{
+  display:inline-grid;
+  place-items:center;
+  min-width:18px;
+  height:18px;
+  padding:0 5px;
+  border:1px solid var(--nr-line);
+  border-bottom-width:2px;
+  border-radius:5px;
+  color:var(--nr-fg-3);
+  font:10.5px/1 var(--nr-mono);
+}
+
+/* ── Divider ── */
+.nr-divider{height:1px;background:var(--nr-sep);width:100%}
+.nr-divider.v{width:1px;height:auto;align-self:stretch}
+.nr-divider.labeled{display:flex;align-items:center;gap:12px;height:auto;background:none;color:var(--nr-fg-3);font:11px var(--nr-font);letter-spacing:.04em}
+.nr-divider.labeled::before,.nr-divider.labeled::after{content:'';flex:1;height:1px;background:var(--nr-sep)}

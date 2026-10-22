@@ -1,0 +1,165 @@
+/* ── Card ── */
+.nr-card{
+  position:relative;
+  border:1px solid var(--nr-line);
+  border-radius:var(--nr-r-md);
+  background:var(--nr-bg);
+  isolation:isolate;
+  transition:border-color var(--nr-dur) var(--nr-ease), transform var(--nr-dur) var(--nr-ease), background-color var(--nr-dur) var(--nr-ease);
+}
+/* Soft glow inside + brighter ring on the border, both centred on the pointer */
+.nr-card.spot::before,.nr-card.spot::after{
+  content:'';
+  position:absolute;
+  inset:-1px;
+  border-radius:inherit;
+  pointer-events:none;
+  opacity:0;
+  transition:opacity .3s var(--nr-ease);
+}
+.nr-card.spot::before{
+  z-index:-1;
+  background:radial-gradient(420px circle at var(--nr-px, 50%) var(--nr-py, 50%), var(--nr-glow), transparent 45%);
+}
+.nr-card.spot::after{
+  padding:1px;
+  background:radial-gradient(260px circle at var(--nr-px, 50%) var(--nr-py, 50%), var(--nr-fg-3), transparent 50%);
+  -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;
+  mask-composite:exclude;
+}
+.nr-card.spot:hover::before,.nr-card.spot:hover::after{opacity:1}
+.nr-card.interactive{cursor:pointer}
+.nr-card.interactive:hover{transform:translateY(-2px)}
+.nr-card.interactive:active{transform:scale(.99)}
+.nr-card-head{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:50px;padding:10px 16px;border-bottom:1px solid var(--nr-sep)}
+.nr-card-title h3{margin:0;font:600 13px/1.3 var(--nr-font);letter-spacing:-.2px}
+.nr-card-title span{display:block;margin-top:2px;font:11px var(--nr-font);color:var(--nr-fg-3)}
+.nr-card-actions{display:flex;align-items:center;gap:6px}
+
+/* ── Stat ── */
+.nr-stat{padding:15px 16px 14px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.nr-stat-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.nr-stat-label{font:11.5px var(--nr-font);color:var(--nr-fg-3)}
+.nr-stat-icon{display:grid;place-items:center;width:28px;height:28px;border:1px solid var(--nr-line);border-radius:8px;color:var(--nr-fg-2)}
+.nr-stat-value{font:620 24px/1.05 var(--nr-font);letter-spacing:-.6px}
+.nr-stat-sub{display:flex;align-items:center;gap:8px;font:11.5px var(--nr-font);color:var(--nr-fg-3)}
+.nr-stat-delta{color:var(--nr-fg);font-family:var(--nr-mono);font-size:11px}
+.nr-stat-delta.neg{color:var(--nr-fg-2)}
+
+/* ── NumberFlow ── */
+.nr-numflow{display:inline-flex;align-items:baseline;font-variant-numeric:tabular-nums;white-space:nowrap}
+/* Columns are top-aligned; the invisible ghost digit comes first, so the row's
+   baseline is a real text baseline (not the bottom edge of a clipped box). */
+.nr-numflow-cols{display:inline-flex;align-items:flex-start;height:1.15em;line-height:1.15}
+.nr-numflow-ghost{width:0;visibility:hidden;line-height:1.15}
+/* clip only horizontally (for the grow / collapse); the digit viewport may extend
+   above and below the line box */
+.nr-numcol{display:flex;justify-content:center;height:1.15em}
+.nr-numcol > *{flex:none}
+/* The viewport is 1.5em tall but takes 1.15em of layout (negative margins): the
+   fade zones sit entirely outside the glyphs, so resting digits are crisp and
+   rolling digits soften only as they enter or leave the window. */
+.nr-digit{
+  position:relative;
+  display:block;
+  height:1.5em;
+  margin:-.175em 0;
+  overflow:hidden;
+  -webkit-mask:linear-gradient(transparent, #000 17%, #000 83%, transparent);
+  mask:linear-gradient(transparent, #000 17%, #000 83%, transparent);
+}
+.nr-digit-strip{display:flex;flex-direction:column;will-change:transform, filter}
+.nr-digit-strip span{display:block;height:1.5em;line-height:1.5em;text-align:center}
+.nr-numflow-sym{display:block;height:1.15em;line-height:1.15}
+.nr-numflow-affix{display:inline-block;line-height:1.15;opacity:.6}
+
+/* ── BlurText ── */
+.nr-blurtext span{
+  display:inline-block;
+  opacity:0;
+  filter:blur(10px);
+  transform:translateY(.35em);
+  transition:opacity .46s var(--nr-ease), filter .5s var(--nr-ease), transform .5s var(--nr-ease);
+  transition-delay:var(--d);
+}
+.nr-blurtext.on span{opacity:1;filter:blur(0);transform:none}
+
+/* ── Accordion ── */
+.nr-accordion{border-top:1px solid var(--nr-sep)}
+.nr-acc-item{border-bottom:1px solid var(--nr-sep)}
+.nr-acc-trigger{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  width:100%;
+  padding:15px 2px;
+  border:0;
+  background:transparent;
+  color:var(--nr-fg-2);
+  font:530 13.5px/1.3 var(--nr-font);
+  text-align:left;
+  cursor:pointer;
+  transition:color var(--nr-dur) var(--nr-ease), padding var(--nr-dur) var(--nr-ease);
+}
+.nr-acc-trigger:hover,.nr-acc-item.open .nr-acc-trigger{color:var(--nr-fg)}
+.nr-acc-trigger:hover{padding-left:6px}
+.nr-acc-trigger:focus-visible{box-shadow:var(--nr-focus);border-radius:var(--nr-r-xs)}
+.nr-acc-chev{flex:none;color:var(--nr-fg-3);transition:transform .34s var(--nr-ease-spring), color var(--nr-dur) var(--nr-ease)}
+.nr-acc-item.open .nr-acc-chev{transform:rotate(180deg);color:var(--nr-fg)}
+.nr-acc-body{padding:0 2px 16px;font:13px/1.6 var(--nr-font);color:var(--nr-fg-2)}
+
+/* ── Avatar ── */
+.nr-avatar{
+  position:relative;
+  display:inline-grid;
+  place-items:center;
+  flex:none;
+  border-radius:50%;
+  background:color-mix(in srgb, var(--nr-fg) 9%, var(--nr-bg));
+  border:1px solid var(--nr-line);
+  color:var(--nr-fg);
+  font-weight:600;
+  letter-spacing:.02em;
+  user-select:none;
+}
+.nr-avatar img{position:absolute;inset:0;width:100%;height:100%;border-radius:50%;object-fit:cover;opacity:0;filter:blur(8px) grayscale(1);transition:opacity .5s var(--nr-ease), filter .6s var(--nr-ease)}
+.nr-avatar img.on{opacity:1;filter:blur(0) grayscale(1)}
+.nr-avatar-status{position:absolute;right:-1px;bottom:-1px;width:30%;height:30%;min-width:7px;min-height:7px;border-radius:50%;background:var(--nr-fg);box-shadow:0 0 0 2px var(--nr-bg)}
+.nr-avatar-status.idle{background:var(--nr-bg);box-shadow:inset 0 0 0 1.5px var(--nr-fg), 0 0 0 2px var(--nr-bg)}
+.nr-avatar-status.off{background:var(--nr-fg-4)}
+.nr-avatar-group{display:inline-flex;align-items:center}
+.nr-avatar-group .nr-avatar{
+  margin-left:calc(var(--sz) * -.3);
+  box-shadow:0 0 0 2px var(--nr-bg);
+  transition:margin .3s var(--nr-ease), transform .3s var(--nr-ease-spring);
+}
+.nr-avatar-group .nr-avatar:first-child{margin-left:0}
+.nr-avatar-group:hover .nr-avatar{margin-left:4px}
+.nr-avatar-group:hover .nr-avatar:first-child{margin-left:0}
+.nr-avatar-group .nr-avatar:hover{transform:translateY(-3px)}
+.nr-avatar-more{background:var(--nr-fg);color:var(--nr-bg);border-color:var(--nr-fg)}
+
+/* ── Sparkline ── */
+.nr-spark{display:block;overflow:visible}
+.nr-spark-line{fill:none;stroke:var(--nr-fg);stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset .9s var(--nr-ease), d .4s var(--nr-ease)}
+.nr-spark-area{fill:var(--nr-fill);opacity:0;transition:opacity .6s var(--nr-ease) .2s, d .4s var(--nr-ease)}
+.nr-spark.on .nr-spark-line{stroke-dashoffset:0}
+.nr-spark.on .nr-spark-area{opacity:1}
+
+/* ── Waveform ── */
+.nr-wave{position:relative;width:100%;height:100%;min-height:40px}
+.nr-wave canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+
+/* ── LogView ── */
+.nr-log{overflow:auto;padding:10px 14px;font:12px/1.85 var(--nr-mono);color:var(--nr-fg-2)}
+.nr-log-line{display:flex;gap:12px;white-space:pre-wrap;animation:nr-smear-in .36s var(--nr-ease) both;--nr-my:6px;--nr-mb:4px}
+.nr-log-time{flex:none;min-width:92px;color:var(--nr-fg-3)}
+.nr-log-tag{flex:none;min-width:42px;font-size:10px;font-weight:600;color:var(--nr-fg-3)}
+.nr-log-tag.warn{color:var(--nr-fg-2)}
+.nr-log-tag.error{color:var(--nr-fg)}
+.nr-log-tag.error + .nr-log-msg{text-decoration:underline;text-decoration-color:var(--nr-fg-4);text-underline-offset:3px}
+.nr-log-msg{flex:1;min-width:0;color:var(--nr-fg);word-break:break-word}
+.nr-log-cursor{display:flex;gap:10px;align-items:center;color:var(--nr-fg)}
+.nr-log-cursor i{display:inline-block;width:7px;height:15px;background:var(--nr-fg);animation:nr-blink 1s steps(2) infinite}

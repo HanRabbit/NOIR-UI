@@ -1,0 +1,59 @@
+/* ── Travelling indicator (Segmented, Tabs, NavList, ListBox, RadioGroup) ──
+   Outer box travels; the ink inside stretches and blurs from the sampled velocity. */
+.nr-thumb{
+  position:absolute;
+  top:0;
+  left:0;
+  z-index:0;
+  pointer-events:none;
+  border-radius:var(--nr-r-sm);
+  transition:opacity var(--nr-dur-fast) var(--nr-ease);
+  will-change:transform;
+}
+.nr-thumb-ink{
+  position:absolute;
+  inset:0;
+  border-radius:inherit;
+  background:var(--nr-thumb-bg, var(--nr-fg));
+  will-change:transform, filter;
+}
+.nr-thumb.off{opacity:0}
+/* Solid indicators sit above their labels and invert them per pixel, so text
+   flips colour exactly where the ink is, however fast it travels. The track
+   behind must be opaque and isolated for the blend to be theme-correct. */
+.nr-thumb.invert{z-index:2;mix-blend-mode:difference}
+.nr-thumb.invert > .nr-thumb-ink{background:#fff}
+
+/* ── Floating surfaces: blur-smear in from the anchor side ── */
+.nr-float{
+  z-index:90;
+  background:var(--nr-raised);
+  border:1px solid var(--nr-line-strong);
+  border-radius:var(--nr-r-md);
+  box-shadow:var(--nr-shadow-pop);
+  opacity:0;
+  filter:blur(var(--nr-blur));
+  pointer-events:none;
+  transition:
+    filter calc(var(--nr-dur) * .7) var(--nr-ease),
+    opacity var(--nr-dur) var(--nr-ease),
+    transform var(--nr-dur) var(--nr-ease);
+}
+.nr-float[data-side="bottom"]{transform:translate3d(0, calc(var(--nr-y) * -1), 0) scale(.985);transform-origin:top center}
+.nr-float[data-side="top"]{transform:translate3d(0, var(--nr-y), 0) scale(.985);transform-origin:bottom center}
+.nr-float[data-side="right"]{transform:translate3d(calc(var(--nr-y) * -1), 0, 0) scale(.985);transform-origin:left center}
+.nr-float[data-side="left"]{transform:translate3d(var(--nr-y), 0, 0) scale(.985);transform-origin:right center}
+.nr-float.open{opacity:1;filter:blur(0px);transform:none;pointer-events:auto}
+
+/* ── Overlay / scrim ── */
+.nr-overlay{
+  position:fixed;
+  inset:0;
+  z-index:100;
+  background:var(--nr-scrim);
+  opacity:0;
+  pointer-events:none;
+  transition:opacity var(--nr-dur) var(--nr-ease), backdrop-filter var(--nr-dur) var(--nr-ease);
+  backdrop-filter:blur(0px);
+}
+.nr-overlay.open{opacity:1;pointer-events:auto;backdrop-filter:blur(2px)}

@@ -1,0 +1,185 @@
+.nr-control-text{display:flex;flex-direction:column;gap:3px;min-width:0}
+.nr-control-text b{font:510 13px/1.3 var(--nr-font);color:var(--nr-fg)}
+.nr-control-text small{font:12px/1.4 var(--nr-font);color:var(--nr-fg-3)}
+.nr-switch-row,.nr-check-row,.nr-radio{display:inline-flex;align-items:flex-start;gap:10px;cursor:pointer;user-select:none}
+.nr-switch-row.disabled,.nr-check-row.disabled,.nr-radio.disabled{opacity:.45;cursor:not-allowed}
+.nr-switch input,.nr-check input,.nr-radio input{
+  position:absolute;
+  inset:0;
+  margin:0;
+  opacity:0;
+  cursor:inherit;
+}
+
+/* ── Switch ── */
+.nr-switch{
+  --w:36px; --h:20px; --k:14px; --pad:3px;
+  position:relative;
+  flex:none;
+  width:var(--w);
+  height:var(--h);
+  border-radius:var(--nr-r-pill);
+  border:1px solid var(--nr-line-strong);
+  background:transparent;
+  transition:background-color .16s var(--nr-ease), border-color .16s var(--nr-ease), box-shadow var(--nr-dur-fast) var(--nr-ease);
+}
+.nr-switch-sm{--w:30px; --h:17px; --k:11px}
+.nr-switch-lg{--w:44px; --h:24px; --k:18px}
+.nr-switch-knob{
+  position:absolute;
+  top:calc((var(--h) - 2px - var(--k)) / 2);
+  left:var(--pad);
+  width:var(--k);
+  height:var(--k);
+  pointer-events:none;
+}
+.nr-switch.on{background:var(--nr-fg);border-color:var(--nr-fg)}
+.nr-switch.on .nr-switch-knob{transform:translateX(calc(var(--w) - 2px - var(--k) - var(--pad) * 2))}
+.nr-switch-ink{
+  position:absolute;
+  top:0;
+  bottom:0;
+  left:0;
+  width:100%;
+  border-radius:var(--nr-r-pill);
+  background:var(--nr-fg-2);
+  transition:width .22s var(--nr-ease-spring), left .22s var(--nr-ease-spring), background-color .16s var(--nr-ease);
+}
+.nr-switch.on .nr-switch-ink{background:var(--nr-bg)}
+/* Press: ink widens toward where it is about to travel (anticipation) */
+.nr-switch-row:active:not(.disabled) .nr-switch-ink{width:135%}
+.nr-switch-row:active:not(.disabled) .nr-switch.on .nr-switch-ink{left:-35%}
+.nr-switch-row:hover:not(.disabled) .nr-switch:not(.on){border-color:var(--nr-fg-3)}
+.nr-switch-row:hover:not(.disabled) .nr-switch:not(.on) .nr-switch-ink{background:var(--nr-fg)}
+.nr-switch:has(input:focus-visible){box-shadow:var(--nr-focus)}
+.nr-switch-row .nr-control-text{padding-top:1px}
+
+/* ── Checkbox ── */
+.nr-check{
+  position:relative;
+  flex:none;
+  width:16px;
+  height:16px;
+  margin-top:1px;
+  border-radius:4.5px;
+  border:1px solid var(--nr-line-strong);
+  transition:border-color var(--nr-dur-fast) var(--nr-ease), box-shadow var(--nr-dur-fast) var(--nr-ease), transform var(--nr-dur) var(--nr-ease-spring);
+}
+.nr-check-fill{
+  position:absolute;
+  inset:-1px;
+  border-radius:inherit;
+  background:var(--nr-fg);
+  transform:scale(.4);
+  opacity:0;
+  filter:blur(3px);
+  transition:transform var(--nr-dur) var(--nr-ease-spring), opacity var(--nr-dur-fast) var(--nr-ease), filter var(--nr-dur) var(--nr-ease);
+}
+.nr-check svg{position:absolute;inset:0;width:100%;height:100%;fill:none;stroke:var(--nr-bg);stroke-width:2;stroke-linecap:round;stroke-linejoin:round;pointer-events:none}
+.nr-check path{stroke-dasharray:24;stroke-dashoffset:24;transition:stroke-dashoffset .24s var(--nr-ease)}
+.nr-check.is-on,.nr-check.is-mixed{border-color:var(--nr-fg)}
+.nr-check.is-on .nr-check-fill,.nr-check.is-mixed .nr-check-fill{transform:scale(1);opacity:1;filter:blur(0)}
+.nr-check.is-on .nr-check-tick{stroke-dashoffset:0;transition-delay:.08s}
+.nr-check.is-mixed .nr-check-dash{stroke-dashoffset:0;transition-delay:.06s}
+.nr-check-row:hover:not(.disabled) .nr-check.is-off{border-color:var(--nr-fg-2)}
+.nr-check-row:active:not(.disabled) .nr-check{transform:scale(.88)}
+.nr-check:has(input:focus-visible){box-shadow:var(--nr-focus)}
+
+/* ── Radio ── */
+.nr-radio-group{position:relative;isolation:isolate;display:flex;flex-direction:column;gap:12px}
+.nr-radio-group.row{flex-direction:row;flex-wrap:wrap;gap:12px 22px}
+.nr-radio-ring{
+  position:relative;
+  z-index:0;
+  flex:none;
+  width:16px;
+  height:16px;
+  margin-top:1px;
+  border-radius:50%;
+  border:1px solid var(--nr-line-strong);
+  transition:border-color var(--nr-dur) var(--nr-ease), box-shadow var(--nr-dur-fast) var(--nr-ease), transform var(--nr-dur) var(--nr-ease-spring);
+}
+.nr-radio.on .nr-radio-ring{border-color:var(--nr-fg)}
+.nr-radio:hover:not(.disabled):not(.on) .nr-radio-ring{border-color:var(--nr-fg-2)}
+.nr-radio:active:not(.disabled) .nr-radio-ring{transform:scale(.88)}
+.nr-radio-ring:has(input:focus-visible){box-shadow:var(--nr-focus)}
+.nr-radio-thumb{z-index:2;border-radius:50%}
+.nr-radio-thumb > .nr-thumb-ink{inset:4px;border-radius:50%}
+
+/* ── Slider ── */
+.nr-slider{
+  position:relative;
+  display:flex;
+  align-items:center;
+  height:28px;
+  width:100%;
+  min-width:120px;
+  cursor:pointer;
+  touch-action:none;
+  user-select:none;
+}
+.nr-slider.disabled{opacity:.42;cursor:not-allowed}
+.nr-slider-track{
+  position:relative;
+  width:100%;
+  height:3px;
+  border-radius:var(--nr-r-pill);
+  background:var(--nr-fill-2);
+  overflow:hidden;
+  transition:height var(--nr-dur) var(--nr-ease);
+}
+.nr-slider:hover:not(.disabled) .nr-slider-track,.nr-slider.dragging .nr-slider-track{height:5px}
+.nr-slider-fill{
+  position:absolute;
+  inset:0 auto 0 0;
+  width:var(--nr-pct);
+  background:var(--nr-fg);
+  border-radius:inherit;
+}
+/* Position, stretch and blur are written every frame by the spring — no CSS
+   transitions on them, or the browser would lag behind the simulation */
+.nr-slider-knob{
+  --nr-kx:1; --nr-ky:1; --nr-kb:0px; --nr-ko:50% 50%;
+  position:absolute;
+  left:var(--nr-pct);
+  top:50%;
+  width:16px;
+  height:16px;
+  translate:-50% -50%;
+  border-radius:50%;
+  outline:0;
+  transition:width var(--nr-dur) var(--nr-ease-spring), height var(--nr-dur) var(--nr-ease-spring), box-shadow var(--nr-dur-fast) var(--nr-ease);
+}
+.nr-slider-dot{
+  position:absolute;
+  inset:0;
+  border-radius:50%;
+  background:var(--nr-fg);
+  box-shadow:0 0 0 4px var(--nr-bg);
+  transform:scale(var(--nr-kx), var(--nr-ky));
+  transform-origin:var(--nr-ko);
+  filter:blur(var(--nr-kb));
+  will-change:transform, filter;
+}
+.nr-slider:hover:not(.disabled) .nr-slider-knob{width:18px;height:18px}
+.nr-slider.dragging .nr-slider-knob{width:20px;height:20px}
+.nr-slider-knob:focus-visible{box-shadow:0 0 0 4px var(--nr-bg), 0 0 0 7px var(--nr-fill-2)}
+.nr-slider-bubble{
+  position:absolute;
+  left:50%;
+  bottom:calc(100% + 10px);
+  translate:-50% 0;
+  padding:4px 7px;
+  border-radius:6px;
+  background:var(--nr-fg);
+  color:var(--nr-bg);
+  font:560 11px/1 var(--nr-mono);
+  font-variant-numeric:tabular-nums;
+  white-space:nowrap;
+  pointer-events:none;
+  opacity:0;
+  filter:blur(5px);
+  transform:translateY(6px);
+  transition:opacity var(--nr-dur-fast) var(--nr-ease), filter var(--nr-dur) var(--nr-ease), transform var(--nr-dur) var(--nr-ease);
+}
+.nr-slider.dragging .nr-slider-bubble,.nr-slider-knob:focus-visible .nr-slider-bubble{opacity:1;filter:blur(0);transform:none}
