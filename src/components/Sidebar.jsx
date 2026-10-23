@@ -134,14 +134,21 @@ export function Sidebar({children, defaultWidth=240, minWidth=200, maxWidth=380,
     kick(18, .86);
   },[railWidth, kick]);
   /* external toggle (button / hotkey / controlled prop) */
-  useEffect(()=>{ if(!isCollapsed) auto.current=false; settle(); },[isCollapsed, settle]);
+  const was=useRef(isCollapsed);
+  useEffect(()=>{
+    /* expanded from outside while folded by a breakpoint: the user's call now */
+    if(was.current && !isCollapsed) auto.current=false;
+    was.current=isCollapsed;
+    settle();
+  },[isCollapsed, settle]);
   /* responsive: crossing a breakpoint folds / hides on the same spring, never a cut */
   const setRef=useRef(setCollapsed);
   setRef.current=setCollapsed;
   useEffect(()=>{
     const c=below(collapseBelow), h=below(hideBelow);
     const onC=()=>{
-      if(c.matches){ if(!collapsedRef.current){ auto.current=true; setRef.current(true); } }
+      /* collapsedRef is set now so a settle before the re-render already aims at the rail */
+      if(c.matches){ if(!collapsedRef.current){ auto.current=true; collapsedRef.current=true; setRef.current(true); settle(); } }
       else if(auto.current){ auto.current=false; if(collapsedRef.current) setRef.current(false); }
     };
     const onH=()=>{ hidden.current=h.matches; settle(); paint(); };
@@ -149,7 +156,8 @@ export function Sidebar({children, defaultWidth=240, minWidth=200, maxWidth=380,
     if(h){ onH(); h.addEventListener?.('change', onH); }
     return ()=>{ c?.removeEventListener?.('change', onC); h?.removeEventListener?.('change', onH); };
   },[collapseBelow, hideBelow, settle, paint]);
-  useEffect(()=>()=>{ cancelAnimationFrame(sim.current.raf); sim.current.drag?.unlock?.(); },[]);
+  /* clear the handle too: a remount (StrictMode, fast refresh) must be able to start the spring again */
+  useEffect(()=>()=>{ const s=sim.current; cancelAnimationFrame(s.raf); s.raf=0; s.drag?.unlock?.(); },[]);
 
   const onDown=(e)=>{
     if(e.button!==0 || hidden.current) return;
