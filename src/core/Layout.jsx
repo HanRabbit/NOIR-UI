@@ -242,7 +242,7 @@ function lines(el){
 /*
  * Text that reflows in motion. When its line breaks change (a breakpoint, the
  * sidebar, a window resize), the paragraph as a whole passes through a short
- * speed-shaped defocus instead of cutting to the new wrap. One animation on one
+ * defocus instead of cutting to the new wrap. One animation on one
  * element, composited - no per-word boxes. A rewrap during the pulse continues
  * from the blur currently drawn. The root must be a block box.
  */
@@ -254,7 +254,7 @@ export function FlowText({as='p', className, children, disabled, maxBlur=3, ...r
   useLayoutEffect(()=>{
     const el=ref.current;
     if(!el || disabled || typeof ResizeObserver==='undefined') return undefined;
-    let sig=null, ready=false, dead=false, fontsAt=-Infinity, visible=true, anim=null, peak=0, last=-Infinity, rebase=0;
+    let sig=null, ready=false, dead=false, fontsAt=-Infinity, visible=true, anim=null, peak=0;
     /* blur the paragraph is drawn with right now, read from our own curve */
     const level=()=>{
       const p=anim?.effect?.getComputedTiming?.().progress;
@@ -277,13 +277,10 @@ export function FlowText({as='p', className, children, disabled, maxBlur=3, ...r
     const check=()=>{
       if(dead) return;
       if(!visible){ sig=null; return; }   // off screen: re-baseline when it comes back
-      /* a continuous resize (sidebar spring, window drag) stays crisp and costs
-         nothing per frame; the wrap is re-read once it has settled */
-      const now=performance.now();
-      const moving=now-last<QUIET_MS;
-      last=now;
-      clearTimeout(rebase);
-      if(moving){ sig=null; rebase=setTimeout(base, QUIET_MS*2); return; }
+      /* line extents only change when words move between lines, so a resize
+         that keeps the wrap is free; during a continuous resize (sidebar spring)
+         each rewrap re-arms the pulse from the blur drawn, holding it while
+         words keep moving and releasing once they stop */
       const next=lines(el);
       const prev=sig;
       sig=next;
@@ -302,7 +299,6 @@ export function FlowText({as='p', className, children, disabled, maxBlur=3, ...r
     return ()=>{
       dead=true;
       cancelAnimationFrame(raf);
-      clearTimeout(rebase);
       document.fonts?.removeEventListener?.('loadingdone', onFonts);
       ro.disconnect();
       io?.disconnect();
