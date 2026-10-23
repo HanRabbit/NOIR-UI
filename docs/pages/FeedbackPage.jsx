@@ -1,10 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {Button, toast, Progress, ProgressRing, Spinner, Skeleton, Badge, StatusDot, Kbd, Divider, Card, LayoutGroup, FlowText} from '../../src/index.js';
+import {Button, toast, Progress, ProgressRing, Spinner, Skeleton, Badge, StatusDot, Kbd, Divider, Steps, Card, LayoutGroup, FlowText} from '../../src/index.js';
 import {Demo, PageHead, Row, Col, Label} from '../kit.jsx';
 
 export function FeedbackPage(){
   const [p,setP]=useState(32);
   const [loading,setLoading]=useState(true);
+  const [step,setStep]=useState(1);
+  const steps=[{label:'Connect', hint:'SWD · 4 MHz'}, {label:'Halt', hint:'Target stopped'}, {label:'Flash', hint:'Image written'}, {label:'Run', hint:'Sampling'}];
   useEffect(()=>{ const t=setInterval(()=>setP((v)=>(v>=100?0:Math.min(100, v+7+Math.random()*12))), 900); return ()=>clearInterval(t); },[]);
   return <LayoutGroup className="doc-page" scale={false}>
     <PageHead eyebrow="Components" title="Feedback">Status should be felt peripherally. Edges glow, loops breathe, and toasts stack like cards you can fan open.</PageHead>
@@ -58,6 +60,16 @@ toast.promise(fetchThing(), {loading:'…', success:'Done', error:'Failed'});`}>
         <Row gap={22}><StatusDot status="live" label="Streaming"/><StatusDot status="busy" label="Connecting"/><StatusDot status="idle" label="Idle"/><StatusDot status="off" label="Offline"/></Row>
         <Divider label="SHORTCUTS"/>
         <Row gap={18}><span className="fb-k"><Kbd>⌘</Kbd><Kbd>K</Kbd> Command</span><span className="fb-k"><Kbd>⇧</Kbd><Kbd>T</Kbd> Theme</span><span className="fb-k"><Kbd>esc</Kbd> Close</span></Row>
+      </Col>
+    </Demo>
+
+    <Demo title="Steps" desc="The rail fills toward the current step, which pings. Finished steps settle into solid ink." code={`<Steps current={step} steps={[{label:'Connect', hint:'SWD · 4 MHz'}, {label:'Halt'}, {label:'Flash'}, {label:'Run'}]}/>`}>
+      <Col gap={22}>
+        <Steps current={step} steps={steps}/>
+        <Row gap={8}>
+          <Button size="sm" onClick={()=>setStep((s)=>Math.max(0, s-1))}>Back</Button>
+          <Button size="sm" variant="primary" onClick={()=>setStep((s)=>Math.min(steps.length-1, s+1))}>Next</Button>
+        </Row>
       </Col>
     </Demo>
   </LayoutGroup>;

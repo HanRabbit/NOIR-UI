@@ -103,10 +103,10 @@ Segmented、Tabs、NavList、ListBox、RadioGroup 共用同一个移动指示块
 | 分组 | |
 |---|---|
 | **操作** | `Button`（光泽跟随指针 · 模糊涟漪 · 弹簧回弹 · `swapKey` 形变 · `loading` · `magnetic`）· `IconButton` · `Chip` |
-| **选择** | `Segmented` · `Tabs`（下划线 / 胶囊）· `NavList` · `Switch` · `Checkbox` · `RadioGroup` · `Slider` |
-| **输入** | `Input`（聚焦线从点击处展开）· `Textarea` · `Field` · `Select` |
+| **选择** | `Segmented` · `Tabs`（下划线 / 胶囊）· `NavList` · `Pagination` · `Switch` · `Checkbox` · `RadioGroup` · `Slider` |
+| **输入** | `Input`（聚焦线从点击处展开）· `Textarea` · `Field` · `Select` · `NumberInput` · `TagInput` · `FileDrop` |
 | **浮层** | `Dialog` · `Drawer` · `Menu` · `Popover` · `Tooltip` · `Command` —— 弹窗打开时页面后退 |
-| **反馈** | `toast` + `Toaster` · `Progress` · `ProgressRing` · `Spinner` · `Skeleton` · `Badge` · `StatusDot` · `Kbd` · `Divider` |
+| **反馈** | `toast` + `Toaster` · `Progress` · `ProgressRing` · `Spinner` · `Skeleton` · `Badge` · `StatusDot` · `Kbd` · `Divider` · `Steps` |
 | **数据展示** | `Card`（指针聚光）· `Stat` · `NumberFlow` · `Waveform` · `Sparkline` · `LogView` · `Accordion` · `Avatar` · `AvatarGroup` · `BlurText` |
 | **布局** | `Sidebar` —— 弹簧阻尼调宽、速度模糊、收起为图标栏 · `LayoutGroup` / `useLayoutMotion` —— 布局重排时子元素带动态模糊平移，不再跳变 · `FlowText` —— 段落重新折行时各行滑到新的断行位置 |
 | **动效** | `Swap` · `Fold` · `PageTransition` · `Thumb` · `useTheme` / `ThemeToggle`（圆形揭示） |

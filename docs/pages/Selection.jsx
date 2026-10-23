@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {AlignLeft, AlignCenter, AlignRight, Rows3, Columns3, Grid2x2} from 'lucide-react';
-import {Segmented, Tabs, Switch, Checkbox, RadioGroup, Slider, NavList, Card, LayoutGroup, FlowText} from '../../src/index.js';
+import {Segmented, Tabs, Switch, Checkbox, RadioGroup, Slider, NavList, Pagination, Card, LayoutGroup, FlowText} from '../../src/index.js';
 import {Demo, PageHead, Row, Col, Label} from '../kit.jsx';
 
 export function Selection(){
@@ -10,6 +10,8 @@ export function Selection(){
   const [vol,setVol]=useState(64);
   const [range,setRange]=useState(4000);
   const [nav,setNav]=useState('scope');
+  const [pg,setPg]=useState(12);
+  const [pg2,setPg2]=useState(2);
   return <LayoutGroup className="doc-page" scale={false}>
     <PageHead eyebrow="Components" title="Selection">Every selected state is a single object that travels — it never teleports. The farther it goes, the harder it smears.</PageHead>
 
@@ -91,6 +93,13 @@ export function Selection(){
         <div className="sel-slider"><Label>Gain</Label><Slider value={vol} onChange={setVol} format={(v)=>`${v}%`} aria-label="Gain"/><code>{vol}%</code></div>
         <div className="sel-slider"><Label>Speed</Label><Slider min={100} max={50000} step={100} value={range} onChange={setRange} format={(v)=>`${(v/1000).toFixed(1)} MHz`} aria-label="Speed"/><code>{range} kHz</code></div>
         <div className="sel-slider"><Label>Disabled</Label><Slider defaultValue={30} disabled aria-label="Disabled"/><code>—</code></div>
+      </Col>
+    </Demo>
+
+    <Demo title="Pagination" desc="Page numbers share one travelling indicator. Long ranges collapse to ellipses around the current page." code={`<Pagination page={p} pageCount={40} onChange={setP}/>`}>
+      <Col gap={18}>
+        <Pagination page={pg} pageCount={40} onChange={setPg} aria-label="Captures"/>
+        <Pagination page={pg2} pageCount={5} onChange={setPg2}/>
       </Col>
     </Demo>
   </LayoutGroup>;

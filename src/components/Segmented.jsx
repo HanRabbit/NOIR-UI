@@ -2,6 +2,7 @@ import React, {useRef} from 'react';
 import {cx} from '../core/utils.js';
 import {useControllable, useSmearIndicator} from '../core/hooks.js';
 import {Swap, Thumb} from '../core/Swap.jsx';
+import {IconChevronRight} from '../core/icons.jsx';
 import {Tooltip} from './Popover.jsx';
 import './Segmented.css';
 
@@ -88,5 +89,35 @@ export function NavList({value, onChange, items=[], tooltips=false, className}){
         </button>
       </Tooltip>;
     })}
+  </nav>;
+}
+
+/* Long ranges collapse to 1 … n … last, keeping `siblings` pages either side of the current one */
+function pagerRange(cur, total, sib){
+  if(total<1) return [];
+  const L=Math.max(2, cur-sib), R=Math.min(total-1, cur+sib);
+  const out=[1];
+  if(L>2) out.push('…');
+  for(let p=L; p<=R; p++) out.push(p);
+  if(R<total-1) out.push('…');
+  if(total>1) out.push(total);
+  return out;
+}
+
+/* Page numbers share one travelling indicator, like Segmented; the arrows dim at either end */
+export function Pagination({page, defaultPage=1, onChange, pageCount=1, siblings=1, className, 'aria-label':ariaLabel='Pagination'}){
+  const [cur,setCur]=useControllable(page, defaultPage, onChange);
+  const rootRef=useRef(null);
+  const thumb=useSmearIndicator(rootRef, '[aria-current="page"]', [cur, pageCount]);
+  const go=(p)=>{ if(p>=1 && p<=pageCount && p!==cur) setCur(p); };
+  return <nav aria-label={ariaLabel} className={cx('nr-pager', className)}>
+    <button type="button" className="nr-pager-arrow" aria-label="Previous page" disabled={cur<=1} onClick={()=>go(cur-1)}><IconChevronRight size={14}/></button>
+    <div ref={rootRef} className="nr-pager-track">
+      <Thumb thumb={thumb} invert/>
+      {pagerRange(cur, pageCount, siblings).map((p, i)=>typeof p==='string'
+        ? <span key={`gap-${i}`} className="nr-pager-gap" aria-hidden="true">{p}</span>
+        : <button type="button" key={p} aria-current={p===cur?'page':undefined} aria-label={`Page ${p}`} onClick={()=>go(p)}>{p}</button>)}
+    </div>
+    <button type="button" className="nr-pager-arrow" aria-label="Next page" disabled={cur>=pageCount} onClick={()=>go(cur+1)}><IconChevronRight size={14}/></button>
   </nav>;
 }

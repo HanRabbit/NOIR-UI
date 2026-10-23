@@ -103,10 +103,10 @@ Wrap a container in `LayoutGroup` and its children stop teleporting when the lay
 | Group | |
 |---|---|
 | **Actions** | `Button` (pointer sheen · blurred ripple · spring · `swapKey` morph · `loading` · `magnetic`) · `IconButton` · `Chip` |
-| **Selection** | `Segmented` · `Tabs` (line / pill) · `NavList` · `Switch` · `Checkbox` · `RadioGroup` · `Slider` |
-| **Inputs** | `Input` (focus line sweeps from the click point) · `Textarea` · `Field` · `Select` |
+| **Selection** | `Segmented` · `Tabs` (line / pill) · `NavList` · `Pagination` · `Switch` · `Checkbox` · `RadioGroup` · `Slider` |
+| **Inputs** | `Input` (focus line sweeps from the click point) · `Textarea` · `Field` · `Select` · `NumberInput` · `TagInput` · `FileDrop` |
 | **Overlays** | `Dialog` · `Drawer` · `Menu` · `Popover` · `Tooltip` · `Command` — the page recedes behind modals |
-| **Feedback** | `toast` + `Toaster` · `Progress` · `ProgressRing` · `Spinner` · `Skeleton` · `Badge` · `StatusDot` · `Kbd` · `Divider` |
+| **Feedback** | `toast` + `Toaster` · `Progress` · `ProgressRing` · `Spinner` · `Skeleton` · `Badge` · `StatusDot` · `Kbd` · `Divider` · `Steps` |
 | **Data display** | `Card` (pointer spotlight) · `Stat` · `NumberFlow` · `Waveform` · `Sparkline` · `LogView` · `Accordion` · `Avatar` · `AvatarGroup` · `BlurText` |
 | **Layout** | `Sidebar` — spring-damped resize, velocity blur, collapse to rail · `LayoutGroup` / `useLayoutMotion` — reflows travel with motion blur instead of jumping · `FlowText` — lines slide to their new breaks when a paragraph rewraps |
 | **Motion** | `Swap` · `Fold` · `PageTransition` · `Thumb` · `useTheme` / `ThemeToggle` (circular reveal) |

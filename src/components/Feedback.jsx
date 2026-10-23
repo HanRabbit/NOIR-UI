@@ -1,5 +1,6 @@
 import React from 'react';
 import {clamp, cx} from '../core/utils.js';
+import {IconCheck} from '../core/icons.jsx';
 import './Feedback.css';
 
 export function Spinner({size=16, className, label='Loading'}){
@@ -65,4 +66,22 @@ export function Kbd({children, className}){
 export function Divider({vertical=false, label, className}){
   if(label) return <div className={cx('nr-divider labeled', className)} role="separator"><span>{label}</span></div>;
   return <div className={cx('nr-divider', vertical&&'v', className)} role="separator" aria-orientation={vertical?'vertical':'horizontal'}/>;
+}
+
+/* Rail fills toward the current step, which pings; finished steps settle into solid ink */
+export function Steps({steps=[], current=0, className, 'aria-label':ariaLabel='Progress'}){
+  const n=steps.length;
+  const pct=n>1?clamp(current/(n-1), 0, 1):0;
+  return <div className={cx('nr-steps', className)} style={{'--n':Math.max(1, n)}}>
+    <i className="nr-steps-rail" aria-hidden="true"><i className="nr-steps-fill" style={{transform:`scaleX(${pct})`}}/></i>
+    <ol className="nr-steps-list" aria-label={ariaLabel}>
+      {steps.map((s, i)=>{
+        const state=i<current?'done':i===current?'active':'todo';
+        return <li key={i} className={cx('nr-step', state)} aria-current={state==='active'?'step':undefined}>
+          <span className="nr-step-dot"><i className="nr-step-ping" aria-hidden="true"/>{state==='done'?<IconCheck size={11} strokeWidth={2.6}/>:i+1}</span>
+          <span className="nr-step-text"><b>{s.label}</b>{s.hint&&<small>{s.hint}</small>}</span>
+        </li>;
+      })}
+    </ol>
+  </div>;
 }

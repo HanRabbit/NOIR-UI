@@ -97,3 +97,124 @@
 .nr-field-msg{min-height:15px;font:11.5px/1.3 var(--nr-font);color:var(--nr-fg-3)}
 .nr-field.has-error .nr-field-msg{color:var(--nr-fg)}
 .nr-field:focus-within .nr-field-label{color:var(--nr-fg)}
+
+/* ── NumberInput: a stepper in Input's frame, sharing its focus line ── */
+.nr-numin{padding:0;gap:0;cursor:default}
+.nr-numin-btn{
+  display:grid;
+  place-items:center;
+  flex:none;
+  width:var(--h);
+  height:100%;
+  padding:0;
+  border:0;
+  background:transparent;
+  color:var(--nr-fg-2);
+  font:400 17px/1 var(--nr-font);
+  cursor:pointer;
+  transition:color var(--nr-dur-fast) var(--nr-ease), background-color var(--nr-dur-fast) var(--nr-ease), transform var(--nr-dur) var(--nr-ease-spring);
+}
+.nr-numin-btn:hover:not(:disabled){color:var(--nr-fg);background:var(--nr-hover)}
+.nr-numin-btn:active:not(:disabled){transform:scale(.9);transition-duration:.08s}
+.nr-numin-btn:disabled{opacity:.3;cursor:not-allowed}
+.nr-numin-value{
+  flex:1;
+  min-width:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  height:100%;
+  overflow:hidden;
+  font:560 13px/1 var(--nr-mono);
+  font-variant-numeric:tabular-nums;
+  color:var(--nr-fg);
+  outline:0;
+  cursor:text;
+}
+.nr-numin-value:focus-visible{box-shadow:inset var(--nr-focus)}
+.nr-numin.nr-input-lg .nr-numin-value{font-size:14px}
+.nr-numin.nr-input-sm .nr-numin-value{font-size:12px}
+
+/* ── TagInput: tags wrap inside the frame; the field takes the rest of the line ── */
+.nr-tagin{height:auto;min-height:var(--h);padding:5px 7px;flex-wrap:wrap;gap:5px}
+.nr-tagin input{flex:1 1 90px;height:22px;padding:0 4px}
+.nr-tag{
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  height:22px;
+  padding:0 3px 0 9px;
+  border-radius:var(--nr-r-pill);
+  background:var(--nr-fill-2);
+  color:var(--nr-fg);
+  font:560 12px/1 var(--nr-font);
+  white-space:nowrap;
+  animation:nr-smear-in var(--nr-dur) var(--nr-ease) backwards;
+}
+.nr-tag-x{
+  display:grid;
+  place-items:center;
+  width:16px;
+  height:16px;
+  padding:0;
+  border:0;
+  border-radius:50%;
+  background:transparent;
+  color:var(--nr-fg-3);
+  cursor:pointer;
+  transition:background-color var(--nr-dur-fast) var(--nr-ease), color var(--nr-dur-fast) var(--nr-ease);
+}
+.nr-tag-x:hover:not(:disabled){background:var(--nr-fg);color:var(--nr-bg)}
+.nr-tag-x:disabled{cursor:not-allowed}
+/* a removed tag blurs out in place; TagGhost collapses its width so the tags after it slide in */
+.nr-tag.leaving{animation:nr-smear-out var(--nr-dur-out) var(--nr-ease-exit) forwards;pointer-events:none;box-sizing:border-box;overflow:hidden}
+
+/* ── FileDrop: a hairline frame; a ring blurs in around it while a file hovers ── */
+.nr-drop-wrap{display:flex;flex-direction:column;gap:10px;min-width:0}
+.nr-drop{
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  min-height:120px;
+  padding:20px;
+  border:1px solid var(--nr-line);
+  border-radius:var(--nr-r-md);
+  text-align:center;
+  cursor:pointer;
+  outline:0;
+  transition:border-color var(--nr-dur) var(--nr-ease), background-color var(--nr-dur) var(--nr-ease);
+}
+.nr-drop:hover:not(.disabled),.nr-drop:focus-visible{border-color:var(--nr-line-strong);background:var(--nr-glow)}
+.nr-drop:focus-visible{box-shadow:var(--nr-focus)}
+.nr-drop.over{border-color:var(--nr-fg);background:var(--nr-glow)}
+.nr-drop.disabled{opacity:.45;cursor:not-allowed}
+.nr-drop-ring{
+  position:absolute;
+  inset:6px;
+  border:1px solid var(--nr-fg);
+  border-radius:calc(var(--nr-r-md) - 4px);
+  opacity:0;
+  transform:scale(1.03);
+  filter:blur(4px);
+  pointer-events:none;
+  transition:opacity var(--nr-dur) var(--nr-ease), transform var(--nr-dur) var(--nr-ease-spring), filter var(--nr-dur) var(--nr-ease);
+}
+.nr-drop.over .nr-drop-ring{opacity:.7;transform:none;filter:blur(0)}
+.nr-drop-label{font:560 13px/1.3 var(--nr-font);color:var(--nr-fg)}
+.nr-drop-hint{font:12px/1.4 var(--nr-font);color:var(--nr-fg-3)}
+.nr-drop-list{display:flex;flex-direction:column;gap:6px;margin:0;padding:0;list-style:none}
+.nr-drop-list li{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:7px 10px;
+  border-radius:var(--nr-r-sm);
+  background:var(--nr-fill);
+  animation:nr-smear-in var(--nr-dur) var(--nr-ease) backwards;
+}
+.nr-drop-list span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font:13px/1.3 var(--nr-font);color:var(--nr-fg)}
+.nr-drop-list em{flex:none;font:500 11px/1 var(--nr-mono);font-style:normal;color:var(--nr-fg-3)}

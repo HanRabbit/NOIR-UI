@@ -15,10 +15,10 @@ export {LayoutGroup, FlowText, useLayoutMotion} from './core/Layout.jsx';
 export * from './core/icons.jsx';
 
 export {Button, IconButton, Chip} from './components/Button.jsx';
-export {Spinner, Progress, ProgressRing, Skeleton, Badge, StatusDot, Kbd, Divider} from './components/Feedback.jsx';
-export {Segmented, Tabs, NavList} from './components/Segmented.jsx';
+export {Spinner, Progress, ProgressRing, Skeleton, Badge, StatusDot, Kbd, Divider, Steps} from './components/Feedback.jsx';
+export {Segmented, Tabs, NavList, Pagination} from './components/Segmented.jsx';
 export {Switch, Checkbox, RadioGroup, Slider} from './components/Controls.jsx';
-export {Input, Textarea, Field} from './components/Input.jsx';
+export {Input, Textarea, Field, NumberInput, TagInput, FileDrop} from './components/Input.jsx';
 export {ListBox, Select, Menu} from './components/ListBox.jsx';
 export {Popover, Tooltip} from './components/Popover.jsx';
 export {Dialog, Drawer, Command} from './components/Modal.jsx';

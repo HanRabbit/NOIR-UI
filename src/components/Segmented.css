@@ -116,3 +116,56 @@
 .nr-nav-item.on{color:var(--nr-fg);font-weight:590}
 .nr-nav-item em{margin-left:auto;font:500 10px/1 var(--nr-mono);font-style:normal;color:inherit;opacity:.55}
 .nr-nav-item:focus-visible{box-shadow:var(--nr-focus)}
+
+/* ── Pagination ── */
+.nr-pager{
+  --h:32px;
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  height:var(--h);
+  padding:3px;
+  border:1px solid var(--nr-line);
+  border-radius:var(--nr-r-sm);
+  background:color-mix(in srgb, var(--nr-fg) 8%, var(--nr-bg));
+}
+.nr-pager-track{position:relative;isolation:isolate;display:flex;align-items:center;gap:2px;height:100%}
+.nr-pager-track > .nr-thumb{border-radius:5px}
+.nr-pager-track button{
+  position:relative;
+  z-index:1;
+  min-width:26px;
+  height:24px;
+  padding:0 6px;
+  border:0;
+  border-radius:5px;
+  background:transparent;
+  color:var(--nr-fg-2);
+  font:560 12px/1 var(--nr-mono);
+  font-variant-numeric:tabular-nums;
+  cursor:pointer;
+  transition:color var(--nr-dur-fast) var(--nr-ease), transform var(--nr-dur) var(--nr-ease-spring);
+}
+.nr-pager-track button:hover:not([aria-current]){color:var(--nr-fg)}
+.nr-pager-track button[aria-current="page"]{color:var(--nr-fg)}
+.nr-pager-track button:active{transform:scale(.92);transition-duration:.08s}
+.nr-pager-track button:focus-visible{box-shadow:var(--nr-focus)}
+.nr-pager-gap{min-width:22px;text-align:center;font:560 12px/1 var(--nr-mono);color:var(--nr-fg-3);user-select:none}
+.nr-pager-arrow{
+  display:grid;
+  place-items:center;
+  width:26px;
+  height:24px;
+  padding:0;
+  border:0;
+  border-radius:5px;
+  background:transparent;
+  color:var(--nr-fg-2);
+  cursor:pointer;
+  transition:color var(--nr-dur-fast) var(--nr-ease), background-color var(--nr-dur-fast) var(--nr-ease), transform var(--nr-dur) var(--nr-ease-spring);
+}
+.nr-pager-arrow:first-child svg{transform:scaleX(-1)}
+.nr-pager-arrow:hover:not(:disabled){color:var(--nr-fg);background:var(--nr-hover)}
+.nr-pager-arrow:active:not(:disabled){transform:scale(.9);transition-duration:.08s}
+.nr-pager-arrow:disabled{opacity:.3;cursor:not-allowed}
+.nr-pager-arrow:focus-visible{box-shadow:var(--nr-focus)}
