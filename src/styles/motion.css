@@ -128,3 +128,7 @@
   }
 }
 
+/* FlowText: clipped pieces of a paragraph travelling to their new lines */
+.nr-flow{position:relative}
+.nr-flow-piece{position:absolute;pointer-events:none;user-select:none}
+.nr-flow-piece > nr-flow-line{display:block}

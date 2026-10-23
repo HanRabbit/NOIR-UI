@@ -89,7 +89,7 @@ Segmented、Tabs、NavList、ListBox、RadioGroup 共用同一个移动指示块
 
 <img src=".github/assets/layout.gif" alt="网格在 2、3、4、6 列之间切换、轮换、增删卡片：每张卡片带动态模糊滑到新位置" width="100%">
 
-用 `LayoutGroup` 包住容器，布局重排时子元素就不再瞬移：断点改变列数、换行、兄弟元素增删时，每个子元素都从原来绘制的位置平移到新位置，并按自身速度加动态模糊。盒子尺寸变化时，里面的文字保持比例、不会被拉伸。`FlowText` 在段落重新折行时让整段文字一起经历一次短暂的模糊过渡：每段只有一个合成层动画，而不是每个单词一个。拖动侧栏、缩放窗口这类连续变化保持清晰，只有跳变才会触发动画。
+用 `LayoutGroup` 包住容器，布局重排时子元素就不再瞬移：断点改变列数、换行、兄弟元素增删时，每个子元素都从原来绘制的位置平移到新位置，并按自身速度加动态模糊。盒子尺寸变化时，里面的文字保持比例、不会被拉伸。`FlowText` 让文字在重新折行时真正移动：掉到下一行的词滑到下一行行首，同一行其余的文字跟着平移，并带动态模糊，落定后与真实段落完全重合。它只在移动期间把段落切成几块按行的片段，从不给每个单词一个元素；连续拖动时会从一个布局流向下一个布局，而不是反复闪烁。拖动侧栏、缩放窗口这类连续变化保持清晰，只有跳变才会触发动画。
 
 <br/>
 
@@ -108,7 +108,7 @@ Segmented、Tabs、NavList、ListBox、RadioGroup 共用同一个移动指示块
 | **浮层** | `Dialog` · `Drawer` · `Menu` · `Popover` · `Tooltip` · `Command` —— 弹窗打开时页面后退 |
 | **反馈** | `toast` + `Toaster` · `Progress` · `ProgressRing` · `Spinner` · `Skeleton` · `Badge` · `StatusDot` · `Kbd` · `Divider` |
 | **数据展示** | `Card`（指针聚光）· `Stat` · `NumberFlow` · `Waveform` · `Sparkline` · `LogView` · `Accordion` · `Avatar` · `AvatarGroup` · `BlurText` |
-| **布局** | `Sidebar` —— 弹簧阻尼调宽、速度模糊、收起为图标栏 · `LayoutGroup` / `useLayoutMotion` —— 布局重排时子元素带动态模糊平移，不再跳变 · `FlowText` —— 段落重新折行时整段模糊过渡 |
+| **布局** | `Sidebar` —— 弹簧阻尼调宽、速度模糊、收起为图标栏 · `LayoutGroup` / `useLayoutMotion` —— 布局重排时子元素带动态模糊平移，不再跳变 · `FlowText` —— 段落重新折行时各行滑到新的断行位置 |
 | **动效** | `Swap` · `Fold` · `PageTransition` · `Thumb` · `useTheme` / `ThemeToggle`（圆形揭示） |
 | **Hooks** | `useSmearIndicator` · `usePresence` · `useAnchor` · `useDismiss` · `useListNav` · `useHotkey` · `useRipple` · `useSpotlight` · `useMagnetic` · `useInView` |
 

@@ -89,7 +89,7 @@ Menus and popovers smear in from the side they open on, and their rows trail in 
 
 <img src=".github/assets/layout.gif" alt="Switching a grid between 2, 3, 4 and 6 columns, rotating, adding and removing tiles: every tile glides to its new place with motion blur" width="100%">
 
-Wrap a container in `LayoutGroup` and its children stop teleporting when the layout reflows. When columns change at a breakpoint, a row wraps, or a sibling arrives or leaves, each child travels from where it was drawn to its new box, blurred by its own speed. Text keeps its proportions while a box resizes. `FlowText` gives a paragraph one short blur, as a whole, when its lines rewrap. That is a single composited animation per paragraph, not one per word. Continuous changes like a sidebar drag or window resize stay crisp, and only jumps animate.
+Wrap a container in `LayoutGroup` and its children stop teleporting when the layout reflows. When columns change at a breakpoint, a row wraps, or a sibling arrives or leaves, each child travels from where it was drawn to its new box, blurred by its own speed. Text keeps its proportions while a box resizes. `FlowText` moves text through a rewrap: the words that drop to the next line slide down to its start while the rest of each line shifts along, motion-blurred, then the real paragraph is back exactly where they landed. It cuts the paragraph into a handful of line pieces only for the length of the move, never one element per word, and a long drag flows from layout to layout instead of strobing. Continuous changes like a sidebar drag or window resize stay crisp, and only jumps animate.
 
 <br/>
 
@@ -108,7 +108,7 @@ Wrap a container in `LayoutGroup` and its children stop teleporting when the lay
 | **Overlays** | `Dialog` · `Drawer` · `Menu` · `Popover` · `Tooltip` · `Command` — the page recedes behind modals |
 | **Feedback** | `toast` + `Toaster` · `Progress` · `ProgressRing` · `Spinner` · `Skeleton` · `Badge` · `StatusDot` · `Kbd` · `Divider` |
 | **Data display** | `Card` (pointer spotlight) · `Stat` · `NumberFlow` · `Waveform` · `Sparkline` · `LogView` · `Accordion` · `Avatar` · `AvatarGroup` · `BlurText` |
-| **Layout** | `Sidebar` — spring-damped resize, velocity blur, collapse to rail · `LayoutGroup` / `useLayoutMotion` — reflows travel with motion blur instead of jumping · `FlowText` — a paragraph blurs through its rewrap as one block |
+| **Layout** | `Sidebar` — spring-damped resize, velocity blur, collapse to rail · `LayoutGroup` / `useLayoutMotion` — reflows travel with motion blur instead of jumping · `FlowText` — lines slide to their new breaks when a paragraph rewraps |
 | **Motion** | `Swap` · `Fold` · `PageTransition` · `Thumb` · `useTheme` / `ThemeToggle` (circular reveal) |
 | **Hooks** | `useSmearIndicator` · `usePresence` · `useAnchor` · `useDismiss` · `useListNav` · `useHotkey` · `useRipple` · `useSpotlight` · `useMagnetic` · `useInView` |
 

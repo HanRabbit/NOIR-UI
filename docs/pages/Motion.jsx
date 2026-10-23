@@ -90,7 +90,7 @@ useLayoutMotion(ref, {scale:false})   // position only, for tall sections`}>
       <div className="mo-hooks">
         {[
           ['useLayoutMotion / <LayoutGroup>', 'FLIP layout reflow with per-child velocity blur; continuous resizes stay crisp.'],
-          ['<FlowText>', 'Paragraph that passes through one short blur, as a whole, when its lines rewrap (breakpoints, sidebar).'],
+          ['<FlowText>', 'Paragraph whose lines slide to their new breaks, motion-blurred, when it rewraps (breakpoints, sidebar, window drags).'],
           ['useSmearIndicator + <Thumb>', 'Travelling indicator with velocity-sampled smear — Segmented, Tabs, NavList, ListBox, RadioGroup.'],
           ['usePresence', 'Mount → paint closed → open; keep mounted through the exit smear.'],
           ['useAnchor', 'Fixed positioning with side-flip locked per open.'],
