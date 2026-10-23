@@ -55,6 +55,7 @@ export default function App(){
   const [mobileNav,setMobileNav]=useState(false);
   const [rail,setRail]=useState(()=>{ try{ return JSON.parse(localStorage.getItem('noir.docs.side'))?.c===true; }catch{ return false; } });
   const mainRef=useRef(null);
+  const contentRef=useRef(null);
   const {toggle}=useTheme();
   const index=PAGES.findIndex((p)=>p.value===page);
   const Current=PAGES[index].el;
@@ -78,7 +79,7 @@ export default function App(){
   ],[page]);
   useHotkey('shift+t', (e)=>{ if(!/INPUT|TEXTAREA/.test(document.activeElement?.tagName)) toggle(); });
   return <div className="doc-app">
-    <Sidebar className="doc-side" storageKey="noir.docs.side" collapsed={rail} onCollapsedChange={setRail} defaultWidth={240} minWidth={200} maxWidth={360} railWidth={64}>
+    <Sidebar className="doc-side" storageKey="noir.docs.side" collapsed={rail} onCollapsedChange={setRail} defaultWidth={240} minWidth={200} maxWidth={360} railWidth={64} reflowRef={contentRef}>
       <SideNav page={page} go={go} rail={rail}/>
     </Sidebar>
     <div className="doc-main" data-nr-depth ref={mainRef}>
@@ -96,7 +97,7 @@ export default function App(){
           <Tooltip content="Docs"><IconButton label="Docs" onClick={()=>go("foundations")}><BookOpen size={16}/></IconButton></Tooltip>
         </div>
       </header>
-      <main className="doc-content">
+      <main className="doc-content" ref={contentRef}>
         <PageTransition pageKey={page} index={index} resetScroll>
           <Current go={go} openCommand={()=>setCmd(true)}/>
         </PageTransition>

@@ -127,3 +127,6 @@
     transition-duration:.001ms !important;
   }
 }
+
+/* FlowText: words are boxes so they can travel when lines rebreak */
+.nr-flow-w{display:inline-block}

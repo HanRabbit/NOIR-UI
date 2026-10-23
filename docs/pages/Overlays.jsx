@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {MoreHorizontal, Pencil, Copy, Trash2, Share2, Download, Settings2, Filter} from 'lucide-react';
-import {Button, IconButton, Dialog, Drawer, Menu, Popover, Tooltip, Switch, Slider, Field, Input, Select, toast, Kbd} from '../../src/index.js';
+import {Button, IconButton, Dialog, Drawer, Menu, Popover, Tooltip, Switch, Slider, Field, Input, Select, toast, Kbd, LayoutGroup} from '../../src/index.js';
 import {Demo, PageHead, Row, Col, Label} from '../kit.jsx';
 
 export function Overlays({openCommand}){
@@ -9,7 +9,7 @@ export function Overlays({openCommand}){
   const [drawer,setDrawer]=useState(false);
   const [sheet,setSheet]=useState(false);
   const [thr,setThr]=useState(40);
-  return <div className="doc-page">
+  return <LayoutGroup className="doc-page" scale={false}>
     <PageHead eyebrow="Components" title="Overlays">Surfaces resolve out of blur toward their anchor. Modals push the page back — it softens and recedes — so focus is physical, not just a scrim.</PageHead>
 
     <Demo title="Dialog" desc="Rises out of blur and leaves upward. The page behind scales down and blurs (opt-in via data-nr-depth)." code={`<Dialog open={open} onClose={close} title="Disconnect target?"
@@ -93,5 +93,5 @@ export function Overlays({openCommand}){
 <Command open={open} onClose={close} items={items}/>`}>
       <Row><Button onClick={openCommand}>Open command menu <Kbd>⌘K</Kbd></Button></Row>
     </Demo>
-  </div>;
+  </LayoutGroup>;
 }

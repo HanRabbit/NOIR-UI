@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Swap, Fold, BlurText, Button, Segmented, Card, PageTransition} from '../../src/index.js';
+import {Swap, Fold, BlurText, Button, Segmented, Card, PageTransition, LayoutGroup} from '../../src/index.js';
 import {Demo, PageHead, Row, Col} from '../kit.jsx';
 
 const WORDS=['Monochrome', 'Minimal', 'Fluid', 'Motion-blur'];
@@ -17,7 +17,9 @@ export function Motion(){
   const [xfold,setXfold]=useState(false);
   const [slide,setSlide]=useState(0);
   const [k,setK]=useState(0);
-  return <div className="doc-page">
+  const [cols,setCols]=useState(4);
+  const [tiles,setTiles]=useState(['imu.ax', 'motor.rpm', 'pid.err', 'bat.v', 'adc.0', 'can.rx']);
+  return <LayoutGroup className="doc-page" scale={false}>
     <PageHead eyebrow="Start" title="Motion">The primitives every component is built from. Use them directly to give your own UI the same physics.</PageHead>
 
     <Demo title="Swap" desc="Text morphs per character: glyphs the two labels share glide to their new place, the rest roll out and in with a stagger, each blurred by its own speed. Block content cross-smears as whole layers. Width glides either way." code={`<Swap swapKey={word} dir={1}>{word}</Swap>          // per-character
@@ -45,6 +47,24 @@ export function Motion(){
       </Col>
     </Demo>
 
+    <Demo title="LayoutGroup" desc="Children never teleport when the layout reflows: a breakpoint changing the column count, a row wrapping, a sibling arriving or leaving. Each child travels from where it was drawn to its new box on the travel curve, blurred by its own speed. Continuous change (a sidebar drag, a window resize) stays crisp; only a jump animates. Every grid on this site uses it." code={`<LayoutGroup className="grid">
+  {items.map((it)=><Card key={it.id}>…</Card>)}
+</LayoutGroup>
+
+useLayoutMotion(ref, {scale:false})   // position only, for tall sections`}>
+      <Col gap={16}>
+        <Row>
+          <Segmented size="sm" value={cols} onChange={setCols} options={[2, 3, 4, 6].map((n)=>({value:n, label:`${n} cols`}))} aria-label="Columns"/>
+          <Button size="sm" onClick={()=>setTiles((t)=>[...t.slice(1), t[0]])}>Rotate</Button>
+          <Button size="sm" onClick={()=>setTiles((t)=>t.length>2?t.slice(1):t)}>Remove</Button>
+          <Button size="sm" onClick={()=>setTiles((t)=>t.length<8?[...t, `ch.${t.length}`]:t)}>Add</Button>
+        </Row>
+        <LayoutGroup className="mo-grid" style={{gridTemplateColumns:`repeat(${cols}, minmax(0, 1fr))`}}>
+          {tiles.map((t, i)=><Card key={t} spotlight={false} className="mo-tile"><span>{String(i+1).padStart(2, '0')}</span><b>{t}</b></Card>)}
+        </LayoutGroup>
+      </Col>
+    </Demo>
+
     <Demo title="PageTransition" desc="Shared-axis transition: both pages ride the same curve in the same direction, blur from their shared speed, and crossfade at peak velocity — one continuous slide. Jumping farther travels farther in the same time, so it smears harder; try 01 → 04, and interrupt mid-flight." code={`<PageTransition pageKey={page} index={order.indexOf(page)}>
   <Page/>
 </PageTransition>`}>
@@ -69,6 +89,8 @@ export function Motion(){
     <Demo title="Hooks" desc="Lower-level building blocks exported for custom components.">
       <div className="mo-hooks">
         {[
+          ['useLayoutMotion / <LayoutGroup>', 'FLIP layout reflow with per-child velocity blur; continuous resizes stay crisp.'],
+          ['<FlowText>', 'Paragraph whose words glide to their new line when it rewraps (breakpoints, sidebar).'],
           ['useSmearIndicator + <Thumb>', 'Travelling indicator with velocity-sampled smear — Segmented, Tabs, NavList, ListBox, RadioGroup.'],
           ['usePresence', 'Mount → paint closed → open; keep mounted through the exit smear.'],
           ['useAnchor', 'Fixed positioning with side-flip locked per open.'],
@@ -81,5 +103,5 @@ export function Motion(){
         ].map(([n, d])=><div key={n}><code>{n}</code><span>{d}</span></div>)}
       </div>
     </Demo>
-  </div>;
+  </LayoutGroup>;
 }

@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {Plug, Download, Trash2, Play, Pause, Settings2, Bold, Italic, Underline, Share2, Star, Heart} from 'lucide-react';
-import {Button, IconButton, Chip, Tooltip, Swap, toast} from '../../src/index.js';
+import {Button, IconButton, Chip, Tooltip, Swap, toast, LayoutGroup} from '../../src/index.js';
 import {Demo, PageHead, Row, Col, Label} from '../kit.jsx';
 
 function ConnectButton(){
@@ -27,7 +27,7 @@ export function Actions(){
   const [fmt,setFmt]=useState({b:true, i:false, u:false});
   const [tags,setTags]=useState(['hss', 'imu']);
   const toggleTag=(t)=>setTags((l)=>l.includes(t)?l.filter((x)=>x!==t):[...l, t]);
-  return <div className="doc-page">
+  return <LayoutGroup className="doc-page" scale={false}>
     <PageHead eyebrow="Components" title="Actions">Buttons answer the pointer in three layers: a sheen that follows the cursor, a blurred ink ripple on press, and a spring on release.</PageHead>
 
     <Demo title="Button" desc="Hover to see the sheen track the pointer. Press and hold for the spring." code={`<Button variant="primary" icon={<Plug/>}>Connect</Button>
@@ -87,5 +87,5 @@ export function Actions(){
         <div className="doc-mono-note">selected: <Swap swapKey={tags.join(',')}>{tags.length?tags.join(', '):'—'}</Swap></div>
       </Col>
     </Demo>
-  </div>;
+  </LayoutGroup>;
 }

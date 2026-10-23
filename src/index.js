@@ -11,6 +11,7 @@ export {
   useStableId, useHotkey, useListNav,
 } from './core/hooks.js';
 export {Swap, Fold, Portal, Thumb} from './core/Swap.jsx';
+export {LayoutGroup, FlowText, useLayoutMotion} from './core/Layout.jsx';
 export * from './core/icons.jsx';
 
 export {Button, IconButton, Chip} from './components/Button.jsx';

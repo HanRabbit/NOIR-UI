@@ -1,5 +1,5 @@
 import React, {useId, useState} from 'react';
-import {Card, Swap, toast} from '../src/index.js';
+import {Card, FlowText, LayoutGroup, Swap, toast} from '../src/index.js';
 import {Check, Copy} from 'lucide-react';
 
 /* Continuous-corner squircle (superellipse, n=5) on a 1024 grid */
@@ -34,7 +34,7 @@ export function PageHead({eyebrow, title, children}){
   return <header className="doc-head">
     {eyebrow&&<div className="doc-eyebrow">{eyebrow}</div>}
     <h1>{title}</h1>
-    {children&&<p>{children}</p>}
+    {children&&<FlowText>{children}</FlowText>}
   </header>;
 }
 
@@ -61,7 +61,7 @@ export function Demo({title, desc, code, children, stage='', id}){
     <div className="doc-demo-head">
       <div>
         <h2>{title}</h2>
-        {desc&&<p>{desc}</p>}
+        {desc&&<FlowText>{desc}</FlowText>}
       </div>
       {code&&<button type="button" className="doc-code-toggle" aria-expanded={showCode} onClick={()=>setShowCode((v)=>!v)}>
         <Swap swapKey={showCode?'h':'s'}>{showCode?'Hide code':'View code'}</Swap>
@@ -73,7 +73,7 @@ export function Demo({title, desc, code, children, stage='', id}){
 }
 
 export const Row=({children, gap=10, wrap=true, align='center', style})=>
-  <div className="doc-row" style={{gap, flexWrap:wrap?'wrap':'nowrap', alignItems:align, ...style}}>{children}</div>;
+  <LayoutGroup className="doc-row" style={{gap, flexWrap:wrap?'wrap':'nowrap', alignItems:align, ...style}}>{children}</LayoutGroup>;
 
 export const Col=({children, gap=14, style})=>
   <div className="doc-col" style={{gap, ...style}}>{children}</div>;

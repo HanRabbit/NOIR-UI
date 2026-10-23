@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {Button, toast, Progress, ProgressRing, Spinner, Skeleton, Badge, StatusDot, Kbd, Divider, Card} from '../../src/index.js';
+import {Button, toast, Progress, ProgressRing, Spinner, Skeleton, Badge, StatusDot, Kbd, Divider, Card, LayoutGroup} from '../../src/index.js';
 import {Demo, PageHead, Row, Col, Label} from '../kit.jsx';
 
 export function FeedbackPage(){
   const [p,setP]=useState(32);
   const [loading,setLoading]=useState(true);
   useEffect(()=>{ const t=setInterval(()=>setP((v)=>(v>=100?0:Math.min(100, v+7+Math.random()*12))), 900); return ()=>clearInterval(t); },[]);
-  return <div className="doc-page">
+  return <LayoutGroup className="doc-page" scale={false}>
     <PageHead eyebrow="Components" title="Feedback">Status should be felt peripherally. Edges glow, loops breathe, and toasts stack like cards you can fan open.</PageHead>
 
     <Demo title="Toast" desc="Stack collapses into a deck — hover to fan it out. Swipe sideways to dismiss. Timers pause while you look." code={`toast('Saved');
@@ -60,5 +60,5 @@ toast.promise(fetchThing(), {loading:'…', success:'Done', error:'Failed'});`}>
         <Row gap={18}><span className="fb-k"><Kbd>⌘</Kbd><Kbd>K</Kbd> Command</span><span className="fb-k"><Kbd>⇧</Kbd><Kbd>T</Kbd> Theme</span><span className="fb-k"><Kbd>esc</Kbd> Close</span></Row>
       </Col>
     </Demo>
-  </div>;
+  </LayoutGroup>;
 }

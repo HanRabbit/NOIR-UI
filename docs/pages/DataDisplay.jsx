@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {Cpu, Zap, MemoryStick, Clock3, Terminal} from 'lucide-react';
-import {Card, CardHeader, Stat, NumberFlow, Accordion, Avatar, AvatarGroup, Sparkline, Waveform, LogView, Button, Switch} from '../../src/index.js';
+import {Card, CardHeader, Stat, NumberFlow, Accordion, Avatar, AvatarGroup, Sparkline, Waveform, LogView, Button, Switch, LayoutGroup} from '../../src/index.js';
 import {Demo, PageHead, Row, Col} from '../kit.jsx';
 
 const PEOPLE=['Ada Lovelace', 'Linus Torvalds', 'Grace Hopper', 'Dennis Ritchie', 'Margaret Hamilton', 'Ken Thompson', 'Barbara Liskov'].map((name, i)=>({name, status:i===0?'live':i===2?'idle':undefined}));
@@ -18,7 +18,7 @@ export function DataDisplay(){
     return ()=>clearInterval(t);
   },[]);
   const push=(level, text)=>setLines((l)=>[...l.slice(-30), {id:l.length+Date.now(), time:new Date().toTimeString().slice(0, 8)+'.000', level, text}]);
-  return <div className="doc-page">
+  return <LayoutGroup className="doc-page" scale={false}>
     <PageHead eyebrow="Components" title="Data display">Numbers roll rather than flip — each digit travels its own distance and blurs accordingly. Lines draw themselves. Borders light where you look.</PageHead>
 
     <Demo title="NumberFlow" desc="Odometer wheels: digits turn in the direction the number moved, so 9 → 0 on a carry rolls forward one notch. New columns and the thousands comma grow in on a carry and collapse on a borrow. Try 999 ↔ 1,000." code={`<NumberFlow value={n}/>
@@ -42,12 +42,12 @@ export function DataDisplay(){
     </Demo>
 
     <Demo title="Card & Stat" desc="Cards carry a pointer spotlight: a faint inner glow plus a brighter arc on the hairline." stage="flush">
-      <div className="dd-stats">
+      <LayoutGroup className="dd-stats">
         <Stat label="Target status" value="Halted" sub="STM32H743ZI" icon={<Zap size={15}/>}/>
         <Stat label="SDK" value="V7.94e" sub="11 214 chips" icon={<Cpu size={15}/>}/>
         <Stat label="Throughput" value={tput} sub="B/s" delta={(tput-1240)/12.4} icon={<MemoryStick size={15}/>}/>
         <Stat label="Uptime" value={n%3600} sub="seconds" icon={<Clock3 size={15}/>}/>
-      </div>
+      </LayoutGroup>
     </Demo>
 
     <Demo title="Waveform" desc="Live trace on canvas, re-sampled every frame so it scrolls sub-pixel smooth. Pausing eases the clock to a stop; the range follows the data with damping." code={`<Waveform running={live} window={4} sample={(t)=>Math.sin(t*2)}/>`}>
@@ -91,5 +91,5 @@ export function DataDisplay(){
         <AvatarGroup people={PEOPLE} max={5} size={32}/>
       </Row>
     </Demo>
-  </div>;
+  </LayoutGroup>;
 }

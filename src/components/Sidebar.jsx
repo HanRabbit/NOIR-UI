@@ -20,8 +20,9 @@ function load(key, fallback){
  *   rail and minWidth collapses to an icon rail (or fully when railWidth=0).
  * - Double-click the handle, or press Enter on it, to toggle. Arrow keys resize.
  * Children can read --nr-side-open (0 = rail, 1 = open) to fade labels.
+ * reflowRef: the region that reflows beside the panel; it gets a speed-matched blur.
  */
-export function Sidebar({children, defaultWidth=240, minWidth=200, maxWidth=380, railWidth=60, collapsed, defaultCollapsed=false, onCollapsedChange, storageKey, className}){
+export function Sidebar({children, defaultWidth=240, minWidth=200, maxWidth=380, railWidth=60, collapsed, defaultCollapsed=false, onCollapsedChange, storageKey, className, reflowRef}){
   const saved=useRef(load(storageKey, {w:defaultWidth, c:defaultCollapsed})).current;
   const [isCollapsed,setCollapsed]=useControllable(collapsed, saved.c, onCollapsedChange);
   const asideRef=useRef(null);
@@ -29,7 +30,7 @@ export function Sidebar({children, defaultWidth=240, minWidth=200, maxWidth=380,
   const sim=useRef(null);
   if(!sim.current){
     const w=clamp(saved.w, minWidth, maxWidth);
-    sim.current={x:isCollapsed?railWidth:w, v:0, target:isCollapsed?railWidth:w, open:w, k:400, c:40, blur:0, raf:0, t:0, drag:null};
+    sim.current={x:isCollapsed?railWidth:w, v:0, target:isCollapsed?railWidth:w, open:w, k:400, c:40, blur:0, rblur:0, raf:0, t:0, drag:null};
   }
   const [initStyle]=useState(()=>({width:sim.current.x}));
   const collapsedRef=useRef(isCollapsed);
@@ -45,7 +46,9 @@ export function Sidebar({children, defaultWidth=240, minWidth=200, maxWidth=380,
     el.style.setProperty('--nr-side-w', `${s.x.toFixed(1)}px`);
     el.dataset.state=open>=.999?'open':open<=.001?'rail':'between';
     if(body) body.style.filter=s.blur>.05?`blur(${s.blur.toFixed(2)}px)`:'';
-  },[minWidth, railWidth]);
+    const flow=reflowRef?.current;
+    if(flow) flow.style.filter=s.rblur>.05?`blur(${s.rblur.toFixed(2)}px)`:'';
+  },[minWidth, railWidth, reflowRef]);
   const persist=useCallback(()=>{
     if(!storageKey) return;
     try{ localStorage.setItem(storageKey, JSON.stringify({w:Math.round(sim.current.open), c:collapsedRef.current})); }catch{ /* storage may be blocked */ }
@@ -63,9 +66,13 @@ export function Sidebar({children, defaultWidth=240, minWidth=200, maxWidth=380,
     /* blur follows edge speed while held; on release it eases back to sharp */
     const want=s.drag?Math.min(6, Math.abs(s.v)*.006+.8):0;
     s.blur+=(want-s.blur)*(1-Math.exp(-dt*(s.drag?22:14)));
-    const rest=!s.drag && Math.abs(s.x-s.target)<.15 && Math.abs(s.v)<4 && s.blur<.05;
+    /* the content that reflows beside the edge blurs with the edge's speed, so
+       re-wrapping lines read as motion instead of flicker; sharp below a crawl */
+    const wantR=reflowRef?Math.min(2.4, Math.max(0, Math.abs(s.v)-90)*.002):0;
+    s.rblur+=(wantR-s.rblur)*(1-Math.exp(-dt*(wantR>s.rblur?30:16)));
+    const rest=!s.drag && Math.abs(s.x-s.target)<.15 && Math.abs(s.v)<4 && s.blur<.05 && s.rblur<.05;
     if(rest){
-      s.x=s.target; s.v=0; s.blur=0; s.raf=0;
+      s.x=s.target; s.v=0; s.blur=0; s.rblur=0; s.raf=0;
       paint();
       persist();
       return;
@@ -78,7 +85,7 @@ export function Sidebar({children, defaultWidth=240, minWidth=200, maxWidth=380,
     s.k=omega*omega;
     s.c=2*zeta*omega;
     if(prefersReducedMotion() && !s.drag){
-      s.x=s.target; s.v=0; s.blur=0;
+      s.x=s.target; s.v=0; s.blur=0; s.rblur=0;
       cancelAnimationFrame(s.raf); s.raf=0;
       paint(); persist();
       return;

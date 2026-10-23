@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {ArrowRight, Cpu, Zap, Activity, Gauge, Play, Pause, Plug} from 'lucide-react';
-import {BlurText, Button, Card, CardHeader, Stat, Waveform, NumberFlow, LogView, Segmented, Switch, Slider, StatusDot, Chip, Kbd, toast, Swap, Progress} from '../../src/index.js';
+import {BlurText, Button, Card, CardHeader, Stat, Waveform, NumberFlow, LogView, Segmented, Switch, Slider, StatusDot, Chip, Kbd, toast, Swap, Progress, LayoutGroup, FlowText} from '../../src/index.js';
 
 const MSGS=[
   ['INFO', 'RTT control block found @ 0x2000_0410'],
@@ -44,14 +44,14 @@ function Workbench(){
   const [follow,setFollow]=useState(true);
   const {rpm, lat, lines}=useLive(running);
   const [stats,setStats]=useState({max:0, avg:0});
-  return <div className="ov-bench">
-    <div className="ov-stats">
+  return <LayoutGroup className="ov-bench" scale={false}>
+    <LayoutGroup className="ov-stats">
       <Stat label="Motor speed" value={rpm} sub="rpm · ch 2" delta={((rpm-4120)/4120)*100} icon={<Gauge size={15}/>}/>
       <Stat label="RTT latency" value={lat} decimals={2} sub="ms · p50" icon={<Activity size={15}/>}/>
       <Stat label="Sample rate" value={rate} sub={`Hz · ${src.toUpperCase()}`} icon={<Zap size={15}/>}/>
       <Stat label="Target" value={<Swap swapKey={running?'r':'h'}>{running?'Running':'Halted'}</Swap>} sub="STM32H743ZI" icon={<Cpu size={15}/>}/>
-    </div>
-    <div className="ov-grid">
+    </LayoutGroup>
+    <LayoutGroup className="ov-grid">
       <Card>
         <CardHeader
           title="Signal"
@@ -79,12 +79,12 @@ function Workbench(){
           <Button variant="primary" block icon={<Plug size={14}/>} onClick={()=>toast.promise(new Promise((r)=>setTimeout(r, 1400)), {loading:'Connecting J-Link…', success:'Connected · SWD @ 4 MHz', error:'Probe not found'})}>Connect device</Button>
         </div>
       </Card>
-    </div>
+    </LayoutGroup>
     <Card>
       <CardHeader title="RTT Terminal" meta="Channel 0 · live" actions={<Kbd>⌘ ↵</Kbd>}/>
       <LogView lines={lines} follow={follow} cursor={running} height={188}/>
     </Card>
-  </div>;
+  </LayoutGroup>;
 }
 
 function ChipToggle({label, initial}){
@@ -95,7 +95,7 @@ function ChipToggle({label, initial}){
 export function Overview({go, openCommand}){
   const [p,setP]=useState(18);
   useEffect(()=>{ const t=setInterval(()=>setP((v)=>(v>=100?8:v+Math.random()*18)), 1200); return ()=>clearInterval(t); },[]);
-  return <div className="ov">
+  return <LayoutGroup className="ov" scale={false}>
     <section className="ov-hero">
       <div className="ov-hero-grid" aria-hidden="true"/>
       <div className="ov-hero-glow" aria-hidden="true"/>
@@ -114,16 +114,16 @@ export function Overview({go, openCommand}){
     <section className="ov-section">
       <div className="ov-section-head">
         <h2>Live workbench</h2>
-        <p>Every surface below is a NOIR component. Values roll, lines smear in, thumbs stretch along their path.</p>
+        <FlowText>Every surface below is a NOIR component. Values roll, lines smear in, thumbs stretch along their path.</FlowText>
       </div>
       <Workbench/>
     </section>
-    <section className="ov-principles">
+    <LayoutGroup as="section" className="ov-principles">
       {[
         ['01', 'Monochrome', 'Two inks — #000 and #fff — and a ladder of alpha. Hierarchy comes from weight, not hue.'],
         ['02', 'Velocity', 'Moving things blur and stretch along their direction, then settle sharp. Distance sets intensity.'],
         ['03', 'Continuity', 'Nothing pops. Content cross-smears, regions fold, surfaces resolve from blur toward their anchor.'],
-      ].map(([n, t, d])=><Card key={n} className="ov-principle"><span>{n}</span><h3>{t}</h3><p>{d}</p></Card>)}
-    </section>
-  </div>;
+      ].map(([n, t, d])=><Card key={n} className="ov-principle"><span>{n}</span><h3>{t}</h3><FlowText>{d}</FlowText></Card>)}
+    </LayoutGroup>
+  </LayoutGroup>;
 }

@@ -230,6 +230,10 @@ code{font:12px var(--nr-mono);padding:1px 5px;border-radius:4px;background:var(-
 .mo-swap > .mo-dot{color:var(--nr-fg-3)}
 .mo-fold{padding:14px 16px;font:13px var(--nr-font);color:var(--nr-fg-2);margin-bottom:4px}
 .mo-fold b{color:var(--nr-fg);font-weight:560}
+.mo-grid{display:grid;gap:10px}
+.mo-tile{display:flex;flex-direction:column;gap:14px;padding:14px 14px 16px;min-width:0}
+.mo-tile span{font:11px var(--nr-mono);color:var(--nr-fg-3)}
+.mo-tile b{font:560 13px var(--nr-mono);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .mo-stage{position:relative;border:1px solid var(--nr-sep);border-radius:var(--nr-r-md);padding:28px;min-height:150px;overflow:hidden}
 .mo-slide span{font:12px var(--nr-mono);color:var(--nr-fg-3)}
 .mo-slide h3{margin:14px 0 6px;font:640 28px/1.1 var(--nr-font);letter-spacing:-.8px}

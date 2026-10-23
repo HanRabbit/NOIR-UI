@@ -1,5 +1,5 @@
 import React, {useRef, useState} from 'react';
-import {Button, Card, Segmented, Thumb, useSmearIndicator} from '../../src/index.js';
+import {Button, Card, Segmented, Thumb, useSmearIndicator, LayoutGroup, FlowText} from '../../src/index.js';
 import {Demo, PageHead, Row} from '../kit.jsx';
 
 const INKS=[
@@ -44,21 +44,21 @@ function SmearLab(){
       {[0, 1, 2, 3, 4].map((i)=><button type="button" key={i} className={'fd-lab-stop'+(pos===i?' on':'')} onClick={()=>setPos(i)} aria-label={`Stop ${i+1}`}/>)}
     </div>
     <Segmented block value={pos} onChange={setPos} options={[0, 1, 2, 3, 4].map((i)=>({value:i, label:`${i*25}%`}))}/>
-    <p className="fd-note">Jump one step, then jump four. Each frame samples the travel curve's instantaneous speed; a virtual 48 ms shutter turns it into a trail <code>trail = min(speed × 48 ms, distance covered)</code>, which sets both stretch (toward the trailing edge, same proportion for every control) and blur. Smear peaks exactly when the thumb is fastest and is gone as it lands.</p>
+    <FlowText className="fd-note">Jump one step, then jump four. Each frame samples the travel curve's instantaneous speed; a virtual 48 ms shutter turns it into a trail <code>trail = min(speed × 48 ms, distance covered)</code>, which sets both stretch (toward the trailing edge, same proportion for every control) and blur. Smear peaks exactly when the thumb is fastest and is gone as it lands.</FlowText>
   </div>;
 }
 
 export function Foundations(){
-  return <div className="doc-page">
+  return <LayoutGroup className="doc-page" scale={false}>
     <PageHead eyebrow="Start" title="Foundations">Tokens live in CSS custom properties prefixed <code>--nr-</code>. Themes swap the values on <code>[data-theme]</code>; components never hard-code ink.</PageHead>
 
     <Demo title="Ink" desc="Pure black and white with an alpha ladder. Light theme mirrors it exactly.">
-      <div className="fd-inks">
+      <LayoutGroup className="fd-inks">
         {INKS.map(([v, n, d])=><div key={v} className="fd-ink">
           <i style={{background:`var(${v})`}}/>
           <div><b>{n}</b><code>{v}</code><small>{d}</small></div>
         </div>)}
-      </div>
+      </LayoutGroup>
     </Demo>
 
     <Demo title="Type" desc="Inter for UI, DM Mono for numbers and code. Tight negative tracking on display sizes.">
@@ -83,5 +83,5 @@ export function Foundations(){
     <Demo title="The smear rule" desc="The signature of NOIR: motion blur is derived from velocity, never keyframed separately — so blur and movement can't drift apart.">
       <SmearLab/>
     </Demo>
-  </div>;
+  </LayoutGroup>;
 }

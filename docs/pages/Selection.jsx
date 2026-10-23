@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {AlignLeft, AlignCenter, AlignRight, Rows3, Columns3, Grid2x2} from 'lucide-react';
-import {Segmented, Tabs, Switch, Checkbox, RadioGroup, Slider, NavList, Card} from '../../src/index.js';
+import {Segmented, Tabs, Switch, Checkbox, RadioGroup, Slider, NavList, Card, LayoutGroup} from '../../src/index.js';
 import {Demo, PageHead, Row, Col, Label} from '../kit.jsx';
 
 export function Selection(){
@@ -10,7 +10,7 @@ export function Selection(){
   const [vol,setVol]=useState(64);
   const [range,setRange]=useState(4000);
   const [nav,setNav]=useState('scope');
-  return <div className="doc-page">
+  return <LayoutGroup className="doc-page" scale={false}>
     <PageHead eyebrow="Components" title="Selection">Every selected state is a single object that travels — it never teleports. The farther it goes, the harder it smears.</PageHead>
 
     <Demo title="Segmented" desc="From LeapTracker's SegSwitch. Click the far ends to feel the stretch scale with distance." code={`<Segmented value={v} onChange={setV}
@@ -93,5 +93,5 @@ export function Selection(){
         <div className="sel-slider"><Label>Disabled</Label><Slider defaultValue={30} disabled aria-label="Disabled"/><code>—</code></div>
       </Col>
     </Demo>
-  </div>;
+  </LayoutGroup>;
 }

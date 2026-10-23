@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {Mail, Lock, Search, Cpu} from 'lucide-react';
-import {Input, Textarea, Field, Select, Button, toast} from '../../src/index.js';
+import {Input, Textarea, Field, Select, Button, toast, LayoutGroup} from '../../src/index.js';
 import {Demo, PageHead, Row, Col} from '../kit.jsx';
 
 const CHIPS=['STM32H743ZI', 'STM32F407VG', 'nRF52840_xxAA', 'RP2040_M0_0', 'ATSAME70Q21', 'GD32F303CC', 'ESP32-S3', 'MIMXRT1062xxx6A'];
@@ -13,7 +13,7 @@ export function Inputs(){
   const [device,setDevice]=useState('STM32H743ZI');
   const [speed,setSpeed]=useState('4000');
   const bad=tried && !/^\S+@\S+\.\S+$/.test(email);
-  return <div className="doc-page">
+  return <LayoutGroup className="doc-page" scale={false}>
     <PageHead eyebrow="Components" title="Inputs">Focus is drawn, not switched on: a hairline sweeps outward from exactly where you clicked. Errors shake once, then hold.</PageHead>
 
     <Demo title="Input" desc="Click near the left or right edge — the focus line grows from that point." code={`<Input prefix={<Search/>} clearable value={q}
@@ -55,5 +55,5 @@ export function Inputs(){
         <Field label="Disabled"><Select disabled defaultValue="a" options={[{value:'a', label:'Locked'}]}/></Field>
       </Row>
     </Demo>
-  </div>;
+  </LayoutGroup>;
 }

@@ -160,13 +160,15 @@ export function useSmearIndicator(rootRef, selector, deps=[]){
       return;
     }
     /* offsetLeft/Top round to whole pixels; measure the sub-pixel centre instead
-       (centre is stable while the target is scaled on :active) */
+       (centre is stable while the target is scaled on :active); per-axis scale
+       so a zoomed or layout-animating ancestor cancels out */
     const rr=root.getBoundingClientRect(), er=el.getBoundingClientRect();
-    const k=root.offsetWidth?rr.width/root.offsetWidth:1;
+    const kx=root.offsetWidth?rr.width/root.offsetWidth:1;
+    const ky=root.offsetHeight?rr.height/root.offsetHeight:kx;
     const w=el.offsetWidth, h=el.offsetHeight;
     const to={
-      x:(er.left+er.width/2-rr.left)/k-root.clientLeft+root.scrollLeft-w/2,
-      y:(er.top+er.height/2-rr.top)/k-root.clientTop+root.scrollTop-h/2,
+      x:(er.left+er.width/2-rr.left)/kx-root.clientLeft+root.scrollLeft-w/2,
+      y:(er.top+er.height/2-rr.top)/ky-root.clientTop+root.scrollTop-h/2,
       w, h, on:true,
     };
     const prev=last.current;
