@@ -83,13 +83,13 @@ Menus and popovers smear in from the side they open on, and their rows trail in 
 
 <img src=".github/assets/sidebar.gif" alt="Dragging the sidebar edge: it trails the pointer, blurs while moving, rubber-bands past max and collapses to an icon rail" width="100%">
 
-`Sidebar`'s width is a damped spring chasing the pointer. Content blurs with the edge's speed, the width rubber-bands past its limits, and releasing past the midpoint collapses it to an icon rail with tooltips. Width and state persist. It can also be collapsed with a button, `⌘\`, a double-click, or the keyboard.
+`Sidebar`'s width is a damped spring chasing the pointer. Content blurs with the edge's speed, the width rubber-bands past its limits, and releasing past the midpoint collapses it to an icon rail with tooltips. Width and state persist. It can also be collapsed with a button, `⌘\`, a double-click, or the keyboard. Give it `collapseBelow` / `hideBelow` and crossing those viewport widths folds it to the rail or slides it away on the same spring, instead of cutting.
 
 ### Reflows travel too
 
 <img src=".github/assets/layout.gif" alt="Switching a grid between 2, 3, 4 and 6 columns, rotating, adding and removing tiles: every tile glides to its new place with motion blur" width="100%">
 
-Wrap a container in `LayoutGroup` and its children stop teleporting when the layout reflows. When columns change at a breakpoint, a row wraps, or a sibling arrives or leaves, each child travels from where it was drawn to its new box, blurred by its own speed. Text keeps its proportions while a box resizes. `FlowText` does the same for each word when a paragraph rewraps. Continuous changes like a sidebar drag or window resize stay crisp, and only jumps animate.
+Wrap a container in `LayoutGroup` and its children stop teleporting when the layout reflows. When columns change at a breakpoint, a row wraps, or a sibling arrives or leaves, each child travels from where it was drawn to its new box, blurred by its own speed. Text keeps its proportions while a box resizes. `FlowText` gives a paragraph one short blur, as a whole, when its lines rewrap. That is a single composited animation per paragraph, not one per word. Continuous changes like a sidebar drag or window resize stay crisp, and only jumps animate.
 
 <br/>
 
@@ -108,7 +108,7 @@ Wrap a container in `LayoutGroup` and its children stop teleporting when the lay
 | **Overlays** | `Dialog` · `Drawer` · `Menu` · `Popover` · `Tooltip` · `Command` — the page recedes behind modals |
 | **Feedback** | `toast` + `Toaster` · `Progress` · `ProgressRing` · `Spinner` · `Skeleton` · `Badge` · `StatusDot` · `Kbd` · `Divider` |
 | **Data display** | `Card` (pointer spotlight) · `Stat` · `NumberFlow` · `Waveform` · `Sparkline` · `LogView` · `Accordion` · `Avatar` · `AvatarGroup` · `BlurText` |
-| **Layout** | `Sidebar` — spring-damped resize, velocity blur, collapse to rail · `LayoutGroup` / `useLayoutMotion` — reflows travel with motion blur instead of jumping · `FlowText` — words glide to their new line when text rewraps |
+| **Layout** | `Sidebar` — spring-damped resize, velocity blur, collapse to rail · `LayoutGroup` / `useLayoutMotion` — reflows travel with motion blur instead of jumping · `FlowText` — a paragraph blurs through its rewrap as one block |
 | **Motion** | `Swap` · `Fold` · `PageTransition` · `Thumb` · `useTheme` / `ThemeToggle` (circular reveal) |
 | **Hooks** | `useSmearIndicator` · `usePresence` · `useAnchor` · `useDismiss` · `useListNav` · `useHotkey` · `useRipple` · `useSpotlight` · `useMagnetic` · `useInView` |
 

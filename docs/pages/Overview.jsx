@@ -113,7 +113,7 @@ export function Overview({go, openCommand}){
     </section>
     <section className="ov-section">
       <div className="ov-section-head">
-        <h2>Live workbench</h2>
+        <FlowText as="h2">Live workbench</FlowText>
         <FlowText>Every surface below is a NOIR component. Values roll, lines smear in, thumbs stretch along their path.</FlowText>
       </div>
       <Workbench/>
@@ -123,7 +123,7 @@ export function Overview({go, openCommand}){
         ['01', 'Monochrome', 'Two inks — #000 and #fff — and a ladder of alpha. Hierarchy comes from weight, not hue.'],
         ['02', 'Velocity', 'Moving things blur and stretch along their direction, then settle sharp. Distance sets intensity.'],
         ['03', 'Continuity', 'Nothing pops. Content cross-smears, regions fold, surfaces resolve from blur toward their anchor.'],
-      ].map(([n, t, d])=><Card key={n} className="ov-principle"><span>{n}</span><h3>{t}</h3><FlowText>{d}</FlowText></Card>)}
+      ].map(([n, t, d])=><Card key={n} className="ov-principle"><span>{n}</span><FlowText as="h3">{t}</FlowText><FlowText>{d}</FlowText></Card>)}
     </LayoutGroup>
   </LayoutGroup>;
 }

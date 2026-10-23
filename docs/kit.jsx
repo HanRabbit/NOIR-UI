@@ -33,7 +33,7 @@ export function Mark({size=30}){
 export function PageHead({eyebrow, title, children}){
   return <header className="doc-head">
     {eyebrow&&<div className="doc-eyebrow">{eyebrow}</div>}
-    <h1>{title}</h1>
+    <FlowText as="h1">{title}</FlowText>
     {children&&<FlowText>{children}</FlowText>}
   </header>;
 }
@@ -60,7 +60,7 @@ export function Demo({title, desc, code, children, stage='', id}){
   return <section className="doc-demo" id={id}>
     <div className="doc-demo-head">
       <div>
-        <h2>{title}</h2>
+        <FlowText as="h2">{title}</FlowText>
         {desc&&<FlowText>{desc}</FlowText>}
       </div>
       {code&&<button type="button" className="doc-code-toggle" aria-expanded={showCode} onClick={()=>setShowCode((v)=>!v)}>

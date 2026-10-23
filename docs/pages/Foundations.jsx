@@ -26,7 +26,7 @@ function CurveDemo(){
   const [k,setK]=useState(0);
   return <div className="fd-curves">
     {CURVES.map(([v, val, d])=><div key={v} className="fd-curve">
-      <div className="fd-curve-meta"><code>{v}</code><small>{d}</small></div>
+      <div className="fd-curve-meta"><code>{v}</code><FlowText as="small">{d}</FlowText></div>
       <div className="fd-curve-track"><i key={k} style={{animationTimingFunction:`var(${v})`}}/></div>
     </div>)}
     <Button size="sm" onClick={()=>setK((x)=>x+1)}>Replay</Button>
@@ -56,17 +56,17 @@ export function Foundations(){
       <LayoutGroup className="fd-inks">
         {INKS.map(([v, n, d])=><div key={v} className="fd-ink">
           <i style={{background:`var(${v})`}}/>
-          <div><b>{n}</b><code>{v}</code><small>{d}</small></div>
+          <div><b>{n}</b><code>{v}</code><FlowText as="small">{d}</FlowText></div>
         </div>)}
       </LayoutGroup>
     </Demo>
 
     <Demo title="Type" desc="Inter for UI, DM Mono for numbers and code. Tight negative tracking on display sizes.">
       <div className="fd-type">
-        <div><span>Display · 44 / 650</span><p style={{font:'650 44px/1.05 var(--nr-font)', letterSpacing:'-1.6px'}}>Quiet surfaces</p></div>
-        <div><span>Title · 22 / 560</span><p style={{font:'560 22px/1.2 var(--nr-font)', letterSpacing:'-.4px'}}>Connection settings</p></div>
-        <div><span>Body · 13.5 / 400</span><p style={{font:'13.5px/1.55 var(--nr-font)', color:'var(--nr-fg-2)'}}>These values are sent to the J-Link SDK on connect.</p></div>
-        <div><span>Mono · 12 / 400</span><p style={{font:'12px/1.6 var(--nr-mono)'}}>0x2000_0410 · imu.ax=0.982</p></div>
+        <div><span>Display · 44 / 650</span><FlowText style={{font:'650 44px/1.05 var(--nr-font)', letterSpacing:'-1.6px'}}>Quiet surfaces</FlowText></div>
+        <div><span>Title · 22 / 560</span><FlowText style={{font:'560 22px/1.2 var(--nr-font)', letterSpacing:'-.4px'}}>Connection settings</FlowText></div>
+        <div><span>Body · 13.5 / 400</span><FlowText style={{font:'13.5px/1.55 var(--nr-font)', color:'var(--nr-fg-2)'}}>These values are sent to the J-Link SDK on connect.</FlowText></div>
+        <div><span>Mono · 12 / 400</span><FlowText style={{font:'12px/1.6 var(--nr-mono)'}}>0x2000_0410 · imu.ax=0.982</FlowText></div>
       </div>
     </Demo>
 

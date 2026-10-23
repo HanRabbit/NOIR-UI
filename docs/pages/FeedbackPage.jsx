@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Button, toast, Progress, ProgressRing, Spinner, Skeleton, Badge, StatusDot, Kbd, Divider, Card, LayoutGroup} from '../../src/index.js';
+import {Button, toast, Progress, ProgressRing, Spinner, Skeleton, Badge, StatusDot, Kbd, Divider, Card, LayoutGroup, FlowText} from '../../src/index.js';
 import {Demo, PageHead, Row, Col, Label} from '../kit.jsx';
 
 export function FeedbackPage(){
@@ -44,7 +44,7 @@ toast.promise(fetchThing(), {loading:'…', success:'Done', error:'Failed'});`}>
             <Row gap={12}><Skeleton circle height={36}/><Col gap={8} style={{flex:1}}><Skeleton width="60%"/><Skeleton width="38%" height={10}/></Col></Row>
             <Skeleton height={86} radius={8}/>
             <Row gap={8}><Skeleton width={64} height={24} radius={999}/><Skeleton width={64} height={24} radius={999}/></Row>
-          </>:<div className="fb-loaded"><b>Session #482</b><p>STM32H743ZI · 12 min · 4 channels</p></div>}
+          </>:<div className="fb-loaded"><b>Session #482</b><FlowText>STM32H743ZI · 12 min · 4 channels</FlowText></div>}
         </Card>
         <Button size="sm" onClick={()=>setLoading((v)=>!v)}>{loading?'Resolve':'Reload'}</Button>
       </Row>

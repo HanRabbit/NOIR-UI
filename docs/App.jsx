@@ -79,7 +79,7 @@ export default function App(){
   ],[page]);
   useHotkey('shift+t', (e)=>{ if(!/INPUT|TEXTAREA/.test(document.activeElement?.tagName)) toggle(); });
   return <div className="doc-app">
-    <Sidebar className="doc-side" storageKey="noir.docs.side" collapsed={rail} onCollapsedChange={setRail} defaultWidth={240} minWidth={200} maxWidth={360} railWidth={64} reflowRef={contentRef}>
+    <Sidebar className="doc-side" storageKey="noir.docs.side" collapsed={rail} onCollapsedChange={setRail} defaultWidth={240} minWidth={200} maxWidth={360} railWidth={64} collapseBelow={1100} hideBelow={821} reflowRef={contentRef}>
       <SideNav page={page} go={go} rail={rail}/>
     </Sidebar>
     <div className="doc-main" data-nr-depth ref={mainRef}>

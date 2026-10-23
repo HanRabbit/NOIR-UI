@@ -228,35 +228,86 @@ export function LayoutGroup({as='div', className, style, children, disabled, sca
   return <Tag ref={ref} className={className} style={style} {...rest}>{children}</Tag>;
 }
 
-/* Words are atoms; a run with no whitespace (`--nr-` + ".") stays one atom so
-   punctuation never wraps away from what it follows */
-const text=(n)=>typeof n==='string'||typeof n==='number'?String(n):Array.isArray(n)?n.map(text).join(''):n?.props?text(n.props.children):'';
-function atoms(children){
-  const out=[];
-  let run=[], k=0;
-  const flush=()=>{ if(run.length){ out.push(<span key={k++} className="nr-flow-w">{run}</span>); run=[]; } };
-  React.Children.toArray(children).forEach((c, i)=>{
-    if(typeof c==='string' || typeof c==='number'){
-      String(c).split(/(\s+)/).forEach((part, j)=>{
-        if(!part) return;
-        if(/^\s+$/.test(part)){ flush(); out.push(part); }
-        else run.push(<React.Fragment key={`${i}.${j}`}>{part}</React.Fragment>);
-      });
-    }else if(/\s/.test(text(c))){ flush(); out.push(c); }  // a phrase must still be able to wrap
-    else run.push(c);
-  });
-  flush();
-  return out;
+/* Line boxes of a block's text, as a signature: rewrapping changes it, a width
+   change that keeps every line intact (or a move) does not */
+function lines(el){
+  const r=document.createRange();
+  r.selectNodeContents(el);
+  const top=el.getBoundingClientRect().top;
+  let sig='';
+  for(const b of r.getClientRects()) if(b.width>0) sig+=`${Math.round(b.width)},${Math.round(b.top-top)};`;
+  return sig;
 }
 
 /*
  * Text that reflows in motion. When its line breaks change (a breakpoint, the
- * sidebar, a window resize), every word that moved glides to its new line,
- * blurred by its own speed, instead of jumping. The root must be a block box.
+ * sidebar, a window resize), the paragraph as a whole passes through a short
+ * speed-shaped defocus instead of cutting to the new wrap. One animation on one
+ * element, composited - no per-word boxes. A rewrap during the pulse continues
+ * from the blur currently drawn. The root must be a block box.
  */
-export function FlowText({as='p', className, children, disabled, stagger=4, maxBlur=4, ...rest}){
+export function FlowText({as='p', className, children, disabled, maxBlur=3, ...rest}){
   const Tag=as;
   const ref=useRef(null);
-  useLayoutMotion(ref, {disabled, scale:false, stagger, maxBlur});
-  return <Tag ref={ref} className={cx('nr-flow', className)} {...rest}>{atoms(children)}</Tag>;
+  const mb=useRef(maxBlur);
+  mb.current=maxBlur;
+  useLayoutEffect(()=>{
+    const el=ref.current;
+    if(!el || disabled || typeof ResizeObserver==='undefined') return undefined;
+    let sig=null, ready=false, dead=false, fontsAt=-Infinity, visible=true, anim=null, peak=0, last=-Infinity, rebase=0;
+    /* blur the paragraph is drawn with right now, read from our own curve */
+    const level=()=>{
+      const p=anim?.effect?.getComputedTiming?.().progress;
+      if(p==null || anim.playState!=='running') return 0;
+      return p<.3?lerp(anim.from, peak, p/.3):lerp(peak, 0, (p-.3)/.7);
+    };
+    const pulse=()=>{
+      const from=level();
+      peak=mb.current;
+      if(!(peak>0)) return;
+      anim?.cancel();
+      anim=el.animate([
+        {offset:0, filter:`blur(${from.toFixed(2)}px)`, opacity:1-Math.min(1, from/peak)*.18},
+        {offset:.3, filter:`blur(${peak}px)`, opacity:.82, easing:EASE.enter.css},
+        {offset:1, filter:'blur(0px)', opacity:1},
+      ], {duration:DUR.travel, easing:'linear'});
+      anim.from=from;
+    };
+    const base=()=>{ sig=visible?lines(el):null; };
+    const check=()=>{
+      if(dead) return;
+      if(!visible){ sig=null; return; }   // off screen: re-baseline when it comes back
+      /* a continuous resize (sidebar spring, window drag) stays crisp and costs
+         nothing per frame; the wrap is re-read once it has settled */
+      const now=performance.now();
+      const moving=now-last<QUIET_MS;
+      last=now;
+      clearTimeout(rebase);
+      if(moving){ sig=null; rebase=setTimeout(base, QUIET_MS*2); return; }
+      const next=lines(el);
+      const prev=sig;
+      sig=next;
+      if(prev==null || prev===next || !ready) return;
+      if(document.fonts?.status==='loading' || performance.now()-fontsAt<150 || prefersReducedMotion() || typeof el.animate!=='function') return;
+      pulse();
+    };
+    sig=lines(el);
+    const ro=new ResizeObserver(check);
+    ro.observe(el);
+    const io=typeof IntersectionObserver==='undefined'?null:new IntersectionObserver(([e])=>{ visible=e.isIntersecting; if(visible && sig==null) base(); });
+    io?.observe(el);
+    let raf=requestAnimationFrame(()=>{ raf=requestAnimationFrame(()=>{ if(!dead){ base(); ready=true; } }); });
+    const onFonts=()=>{ fontsAt=performance.now(); base(); };
+    document.fonts?.addEventListener?.('loadingdone', onFonts);
+    return ()=>{
+      dead=true;
+      cancelAnimationFrame(raf);
+      clearTimeout(rebase);
+      document.fonts?.removeEventListener?.('loadingdone', onFonts);
+      ro.disconnect();
+      io?.disconnect();
+      anim?.cancel();
+    };
+  },[disabled]);
+  return <Tag ref={ref} className={cx('nr-flow', className)} {...rest}>{children}</Tag>;
 }

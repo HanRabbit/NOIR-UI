@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Swap, Fold, BlurText, Button, Segmented, Card, PageTransition, LayoutGroup} from '../../src/index.js';
+import {Swap, Fold, BlurText, Button, Segmented, Card, PageTransition, LayoutGroup, FlowText} from '../../src/index.js';
 import {Demo, PageHead, Row, Col} from '../kit.jsx';
 
 const WORDS=['Monochrome', 'Minimal', 'Fluid', 'Motion-blur'];
@@ -72,7 +72,7 @@ useLayoutMotion(ref, {scale:false})   // position only, for tall sections`}>
         <Segmented value={slide} onChange={setSlide} options={SLIDES.map(([n], i)=>({value:i, label:n}))} aria-label="Slide"/>
         <div className="mo-stage">
           <PageTransition pageKey={slide} index={slide}>
-            <div className="mo-slide"><span>{SLIDES[slide][0]}</span><h3>{SLIDES[slide][1]}</h3><p>{SLIDES[slide][2]}</p></div>
+            <div className="mo-slide"><span>{SLIDES[slide][0]}</span><FlowText as="h3">{SLIDES[slide][1]}</FlowText><FlowText>{SLIDES[slide][2]}</FlowText></div>
           </PageTransition>
         </div>
       </Col>
@@ -90,7 +90,7 @@ useLayoutMotion(ref, {scale:false})   // position only, for tall sections`}>
       <div className="mo-hooks">
         {[
           ['useLayoutMotion / <LayoutGroup>', 'FLIP layout reflow with per-child velocity blur; continuous resizes stay crisp.'],
-          ['<FlowText>', 'Paragraph whose words glide to their new line when it rewraps (breakpoints, sidebar).'],
+          ['<FlowText>', 'Paragraph that passes through one short blur, as a whole, when its lines rewrap (breakpoints, sidebar).'],
           ['useSmearIndicator + <Thumb>', 'Travelling indicator with velocity-sampled smear — Segmented, Tabs, NavList, ListBox, RadioGroup.'],
           ['usePresence', 'Mount → paint closed → open; keep mounted through the exit smear.'],
           ['useAnchor', 'Fixed positioning with side-flip locked per open.'],
@@ -100,7 +100,7 @@ useLayoutMotion(ref, {scale:false})   // position only, for tall sections`}>
           ['DUR', 'Fixed rhythms: travel 280 · swap 260 · page 320 · roll 300 ms.'],
           ['smear(speed, size, {covered})', 'Virtual shutter: px/ms → {trail, stretch, squash, blur}, trail ≤ distance covered.'],
           ['sampleEase(ease, ms)', 'Keyframes with position and instantaneous velocity per frame.'],
-        ].map(([n, d])=><div key={n}><code>{n}</code><span>{d}</span></div>)}
+        ].map(([n, d])=><div key={n}><code>{n}</code><FlowText as="span">{d}</FlowText></div>)}
       </div>
     </Demo>
   </LayoutGroup>;

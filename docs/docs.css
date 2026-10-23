@@ -251,7 +251,6 @@ code{font:12px var(--nr-mono);padding:1px 5px;border-radius:4px;background:var(-
   .fd-inks{grid-template-columns:repeat(2, 1fr)}
 }
 @media (max-width:820px){
-  .doc-side{display:none}
   .doc-side-toggle{display:none}
   .doc-mobile-nav{display:block;margin-left:-8px}
   .doc-top{padding:0 12px}

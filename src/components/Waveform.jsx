@@ -51,6 +51,11 @@ export function Waveform({sample=demoSignal, running=true, window:span=4, speed=
     const ro=typeof ResizeObserver!=='undefined'?new ResizeObserver(resize):null;
     ro?.observe(wrap);
     const reduced=prefersReducedMotion();
+    /* ink is read once and again only when the theme can have changed - a
+       computed-style read every frame was the trace's main cost */
+    let ink=readInk(wrap), inkAt=performance.now();
+    const mo=typeof MutationObserver!=='undefined'?new MutationObserver(()=>{ ink=readInk(wrap); }):null;
+    mo?.observe(document.documentElement, {attributes:true, attributeFilter:['data-theme', 'class', 'style']});
     let raf=0;
     const frame=(now)=>{
       const p=live.current;
@@ -79,7 +84,7 @@ export function Waveform({sample=demoSignal, running=true, window:span=4, speed=
       const sw=p.strokeWidth;
       const xOf=(i)=>(i/n)*(w-10);
       const yOf=(v)=>sw+(1-(v-st.lo)/range)*(h-sw*2);
-      const ink=readInk(wrap);
+      if(now-inkAt>1000){ inkAt=now; ink=readInk(wrap); }   // a scoped theme on an ancestor
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, w, h);
       ctx.beginPath();
@@ -132,7 +137,7 @@ export function Waveform({sample=demoSignal, running=true, window:span=4, speed=
       raf=requestAnimationFrame(frame);
     };
     raf=requestAnimationFrame(frame);
-    return ()=>{ cancelAnimationFrame(raf); ro?.disconnect(); };
+    return ()=>{ cancelAnimationFrame(raf); ro?.disconnect(); mo?.disconnect(); };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   },[]);
   return <div ref={wrapRef} className={cx('nr-wave', className)} role="img" aria-label={ariaLabel}>

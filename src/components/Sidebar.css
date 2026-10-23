@@ -17,6 +17,7 @@
   will-change:filter;
 }
 .nr-side.dragging .nr-side-body{pointer-events:none;user-select:none}
+.nr-side[data-state="hidden"]{border-right-width:0;visibility:hidden}
 
 /* Handle: invisible hit strip on the border; a hairline grows in on hover */
 .nr-side-handle{

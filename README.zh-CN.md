@@ -83,13 +83,13 @@ Segmented、Tabs、NavList、ListBox、RadioGroup 共用同一个移动指示块
 
 <img src=".github/assets/sidebar.gif" alt="拖拽侧栏边缘：宽度带阻尼跟随指针，移动时模糊，超出上限有橡皮筋，收起为图标栏" width="100%">
 
-`Sidebar` 的宽度是一个追随指针的阻尼弹簧：内容随边缘速度模糊，超出上下限时有橡皮筋阻力，越过中线松手就收起为带提示的图标栏。宽度和收起状态会被记住。也可以用按钮、`⌘\`、双击或键盘收起。
+`Sidebar` 的宽度是一个追随指针的阻尼弹簧：内容随边缘速度模糊，超出上下限时有橡皮筋阻力，越过中线松手就收起为带提示的图标栏。宽度和收起状态会被记住。也可以用按钮、`⌘\`、双击或键盘收起。设置 `collapseBelow` / `hideBelow` 后，视口宽度越过这些断点时，侧栏会沿同一个弹簧收成图标栏或滑出隐藏，不会直接跳变。
 
 ### 布局重排也有运动
 
 <img src=".github/assets/layout.gif" alt="网格在 2、3、4、6 列之间切换、轮换、增删卡片：每张卡片带动态模糊滑到新位置" width="100%">
 
-用 `LayoutGroup` 包住容器，布局重排时子元素就不再瞬移：断点改变列数、换行、兄弟元素增删时，每个子元素都从原来绘制的位置平移到新位置，并按自身速度加动态模糊。盒子尺寸变化时，里面的文字保持比例、不会被拉伸。`FlowText` 让段落重新折行时的每个单词也这样移动到新的一行。拖动侧栏、缩放窗口这类连续变化保持清晰，只有跳变才会触发动画。
+用 `LayoutGroup` 包住容器，布局重排时子元素就不再瞬移：断点改变列数、换行、兄弟元素增删时，每个子元素都从原来绘制的位置平移到新位置，并按自身速度加动态模糊。盒子尺寸变化时，里面的文字保持比例、不会被拉伸。`FlowText` 在段落重新折行时让整段文字一起经历一次短暂的模糊过渡：每段只有一个合成层动画，而不是每个单词一个。拖动侧栏、缩放窗口这类连续变化保持清晰，只有跳变才会触发动画。
 
 <br/>
 
@@ -108,7 +108,7 @@ Segmented、Tabs、NavList、ListBox、RadioGroup 共用同一个移动指示块
 | **浮层** | `Dialog` · `Drawer` · `Menu` · `Popover` · `Tooltip` · `Command` —— 弹窗打开时页面后退 |
 | **反馈** | `toast` + `Toaster` · `Progress` · `ProgressRing` · `Spinner` · `Skeleton` · `Badge` · `StatusDot` · `Kbd` · `Divider` |
 | **数据展示** | `Card`（指针聚光）· `Stat` · `NumberFlow` · `Waveform` · `Sparkline` · `LogView` · `Accordion` · `Avatar` · `AvatarGroup` · `BlurText` |
-| **布局** | `Sidebar` —— 弹簧阻尼调宽、速度模糊、收起为图标栏 · `LayoutGroup` / `useLayoutMotion` —— 布局重排时子元素带动态模糊平移，不再跳变 · `FlowText` —— 文字重新折行时单词滑到新的一行 |
+| **布局** | `Sidebar` —— 弹簧阻尼调宽、速度模糊、收起为图标栏 · `LayoutGroup` / `useLayoutMotion` —— 布局重排时子元素带动态模糊平移，不再跳变 · `FlowText` —— 段落重新折行时整段模糊过渡 |
 | **动效** | `Swap` · `Fold` · `PageTransition` · `Thumb` · `useTheme` / `ThemeToggle`（圆形揭示） |
 | **Hooks** | `useSmearIndicator` · `usePresence` · `useAnchor` · `useDismiss` · `useListNav` · `useHotkey` · `useRipple` · `useSpotlight` · `useMagnetic` · `useInView` |
 

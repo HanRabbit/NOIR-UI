@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {AlignLeft, AlignCenter, AlignRight, Rows3, Columns3, Grid2x2} from 'lucide-react';
-import {Segmented, Tabs, Switch, Checkbox, RadioGroup, Slider, NavList, Card, LayoutGroup} from '../../src/index.js';
+import {Segmented, Tabs, Switch, Checkbox, RadioGroup, Slider, NavList, Card, LayoutGroup, FlowText} from '../../src/index.js';
 import {Demo, PageHead, Row, Col, Label} from '../kit.jsx';
 
 export function Selection(){
@@ -31,10 +31,10 @@ export function Selection(){
 ]}/>`}>
       <Col gap={24}>
         <Tabs variant="line" items={[
-          {value:'ov', label:'Overview', content:<p className="doc-p">Connected to STM32H743ZI via SWD @ 4 MHz. Target halted at <code>0x0800_1A3C</code>.</p>},
-          {value:'ch', label:'Channels', badge:4, content:<p className="doc-p">imu.ax · imu.ay · motor.rpm · pid.err — sampling at 1 kHz over HSS.</p>},
-          {value:'tr', label:'Trigger', content:<p className="doc-p">Normal mode, rising edge on <code>motor.rpm</code> at 4 000.</p>},
-          {value:'ex', label:'Export', content:<p className="doc-p">CSV · JSON · raw RTT. Last export 2 minutes ago.</p>},
+          {value:'ov', label:'Overview', content:<FlowText className="doc-p">Connected to STM32H743ZI via SWD @ 4 MHz. Target halted at <code>0x0800_1A3C</code>.</FlowText>},
+          {value:'ch', label:'Channels', badge:4, content:<FlowText className="doc-p">imu.ax · imu.ay · motor.rpm · pid.err — sampling at 1 kHz over HSS.</FlowText>},
+          {value:'tr', label:'Trigger', content:<FlowText className="doc-p">Normal mode, rising edge on <code>motor.rpm</code> at 4 000.</FlowText>},
+          {value:'ex', label:'Export', content:<FlowText className="doc-p">CSV · JSON · raw RTT. Last export 2 minutes ago.</FlowText>},
         ]}/>
         <Tabs variant="pill" items={[{value:'d', label:'Day'}, {value:'w', label:'Week'}, {value:'m', label:'Month'}, {value:'y', label:'Year'}]}/>
       </Col>
